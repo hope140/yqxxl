@@ -22,7 +22,7 @@ async function collection(userid, mapname, mapx, mapy, offlinenum, maxrun) {
 			// if (error) throw new Error(error);
 			msg = JSON.parse(response.body);
 			if (msg.code == 0) {
-				console.log("获得材料:" + msg.data.propInfo.name, "状态：" + "魂值" + msg.data.userStateInfo.hunMp + "/" + msg.data.userStateInfo.hunMpMax + "魂值" + msg.data.userLv.hunExp);
+				console.log("获得材料:" + msg.data.propInfo.name, "状态：" + "魂值" + msg.data.userStateInfo.hunMp + "/" + msg.data.userStateInfo.hunMpMax + " 魂" + msg.data.userLv.hunExp);
 			} else if (msg.code == -3) {
 				console.log("请求超时，同时运行多个脚本或游戏未退出，请检查！");
 			} else {
