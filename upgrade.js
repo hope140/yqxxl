@@ -63,7 +63,7 @@ async function upgrade(userid, type) {
 		// if (error) throw new Error(error);
 		msg = JSON.parse(response.body);
 		if (msg.code == 0) {
-			console.log(msg.data.msg + msg.data.userLv.wuLV + "级武者" + msg.data.userLv.linLv + "级灵者" + msg.data.userLv.hunLv + "级炼药师");
+			console.log(msg.data.msg + " 等级：" + msg.data.userLv.wuLv + "级武者" + msg.data.userLv.linLv + "级灵者" + msg.data.userLv.hunLv + "级炼药师");
 		} else {
 			console.log(msg.msg);
 		}
@@ -79,7 +79,7 @@ async function upgrade(userid, type) {
 // main()
 
 async function* main() {
-	for (let count = 0; count < 1000; count++) {
+	for (let count = 0; count < 60; count++) {
 		yield upgrade(27188, 2);
 		yield dazuo(27188, "炎谷", 7, 8, 25);
 	}

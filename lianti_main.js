@@ -19,7 +19,7 @@ async function lianti(userid, offlinenum, maxrun) {
 			// if (error) throw new Error(error);
 			msg = JSON.parse(response.body);
 			if (msg.code == 0) {
-				console.log(msg.data.msg + " 气血：" + msg.data.userStateInfo.hp + "/" + msg.data.userStateInfo.hpMax + " 灵：" + msg.data.userStateInfo.linMp + "/" + msg.data.userStateInfo.linMpMax);
+				console.log(msg.data.msg + " 气血：" + msg.data.userStateInfo.hp + "/" + msg.data.userStateInfo.hpMax + " 灵：" + msg.data.userStateInfo.linMp + "/" + msg.data.userStateInfo.linMpMax + "武值" + msg.data.userLv.wuExp);
 			} else if (msg.code == -3) {
 				console.log("请求超时，同时运行多个脚本或游戏未退出，请检查！");
 			} else {
