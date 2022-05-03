@@ -25,10 +25,23 @@ async function dazuo(userid, mapname, mapx, mapy, maxrun) {
 				userState = msg.data.userStateInfo;
 			} else if (msg.code == -3) {
 				console.log(msg.msg);
+				// var userState = {
+				// 			"hp": 1,
+				// 			"hpMax": 2,
+				// 			"linMp": 1,
+				// 			"linMpMax": 2,
+				// 			"hunMp": 1,
+				// 			"hunMpMax": 2,
+				// };
 			} else {
 				console.log(msg.msg);
 			}
 		});
+		// console.log(msg);
+		// if (msg.data.userStateInfo.hp === msg.body.data.userStateInfo.hpMax) {
+		// 	console.log("气血已满，结束");
+		// 	break;
+		// }
 	}
 	task.next('打坐结束，开始下一步');
 }
@@ -57,12 +70,12 @@ async function upgrade(userid, type) {
 	});
 	task.next('升级结束，开始下一步');
 }
-
 async function* main() {
 	for (let count = 0; count < 60; count++) {
 		yield upgrade(27188, 2);
-		yield dazuo(27188, "炎谷", 7, 8, 25);
+		yield dazuo(27188, "殒神林1", 3, 7, 100);
 	}
 }
+
 const task = main()
 task.next()

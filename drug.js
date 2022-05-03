@@ -123,12 +123,12 @@ async function handle(userid, type ,maxrun) {
 }
 
 async function* main() {
-	// yield makeDrug(20487, "2" ,"[196390,196390,196393,248615,211901]" ,40 , 1);
+	// yield makeDrug(27188, "2" ,"[196390,196390,196393,248615,211901]" ,40 , 1);
 	for (let count = 0; count < 8; count++) {
-		// yield useDrug(20487, 101686, 1);
-		yield dazuo(20487, "殒神林1", 3, 7, 6);
-		yield handle(20487, 1, 1);
-		yield handle(20487, 2, 1);
+		// yield useDrug(27188, 101686, 1);
+		yield dazuo(27188, "殒神林1", 3, 7, 6);
+		yield handle(27188, 1, 1);
+		yield handle(27188, 2, 1);
 	}
 }
 const task = main()

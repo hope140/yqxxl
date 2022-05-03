@@ -26,4 +26,4 @@ async function gainprop(userid, gainpropid, maxrun) {
 		});
 	}
 }
-gainprop(27188, 14 , 1);
+gainprop(27188, 14, 1);

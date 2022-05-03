@@ -44,4 +44,4 @@ async function dazuo(userid, mapname, mapx, mapy, maxrun) {
 		// }
 	}
 }
-dazuo(27188, "炎谷", 7, 8, 25);
+dazuo(27188, "幽木林4", 3, 7, 15);

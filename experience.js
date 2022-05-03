@@ -32,4 +32,4 @@ async function experience(userid, mapname, mapx, mapy, offlinenum, maxrun) {
 		});
 	}
 }
-experience(27188, "炎谷", 7, 8, 0, 100000);
+experience(27188, "殒神林1", 3, 7, 0, 100);

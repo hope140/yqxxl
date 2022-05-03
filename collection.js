@@ -32,4 +32,4 @@ async function collection(userid, mapname, mapx, mapy, offlinenum, maxrun) {
 		});
 	}
 }
-dazuo(27188, "炎谷", 7, 8, 25);
+collection(27188, "幽木林1", 3, 7, 0, 15);

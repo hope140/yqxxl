@@ -68,10 +68,11 @@ async function dazuo(userid, mapname, mapx, mapy, maxrun) {
 }
 
 async function* main() {
-	for (let count = 0; count < 1000; count++) {
-		yield dazuo(27188, "炎谷", 7, 8, 37);
-		yield collection(27188, "炎谷", 7, 8, 0, 27);
+	for (let count = 0; count < 5; count++) {
+		yield dazuo(27188, "殒神林1", 3, 7, 6);
+		yield collection(27188, "占雪狱7", 3, 7, 0, 9);
 	}
 }
+
 const task = main()
 task.next()

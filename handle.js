@@ -30,8 +30,8 @@ async function handle(userid, type ,maxrun) {
 
 async function* main() {
 	for (let count = 0; count < 1; count++) {
-		yield handle(20487, 1, 1);
-		yield handle(20487, 2, 1);
+		yield handle(27188, 1, 1);
+		yield handle(27188, 2, 1);
 	}
 }
 const task = main()

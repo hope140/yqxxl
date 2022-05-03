@@ -26,4 +26,4 @@ async function useDrug(userid, bagid, maxrun) {
 		});
 	}
 }
-useDrug(20487, 101686, 1);
+useDrug(27188, 101686, 1);

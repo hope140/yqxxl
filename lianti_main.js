@@ -65,9 +65,9 @@ async function dazuo(userid, mapname, mapx, mapy, maxrun) {
 }
 
 async function* main() {
-	for (let count = 0; count < 1000; count++) {
-		yield dazuo(27188, "炎谷", 7, 8, 37);
-		yield lianti(27188, 0, 80);
+	for (let count = 0; count < 5; count++) {
+		yield dazuo(27188, "殒神林1", 3, 7, 6);
+		yield lianti(27188, 0, 84);
 	}
 }
 const task = main()
