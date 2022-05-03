@@ -23,12 +23,6 @@ async function output(userid, maxrun) {
 				console.log(msg.msg);
 			}
 		});
-		// console.log(msg);
-		// if (msg.data.userStateInfo.hp === msg.body.data.userStateInfo.hpMax) {
-		// 	console.log("气血已满，结束");
-		// 	break;
-		// }
 	}
 }
-// output(20487, 10);
 output(27188, 10);

@@ -29,5 +29,4 @@ async function lianti(userid, offlinenum, maxrun) {
 		});
 	}
 }
-// lianti(20487, 0, 15);
-lianti(27188, 0, 27);
+// lianti(27188, 0, 27);

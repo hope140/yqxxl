@@ -32,5 +32,4 @@ async function collection(userid, mapname, mapx, mapy, offlinenum, maxrun) {
 		});
 	}
 }
-// collection(20487, "幽木林1", 3, 7, 0, 15);
 dazuo(27188, "炎谷", 7, 8, 25);
