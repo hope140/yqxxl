@@ -1,7 +1,7 @@
 const sleep = (delay) => new Promise((resolve) => setTimeout(resolve, delay));
 async function output(userid, maxrun) {
 	for (let count = 0; count < maxrun; count++) {
-		 await sleep(100)
+		//  await sleep(100)
 		console.log("第" + (count + 1) + "次讨伐");
 		var request = require('request');
 		var options = {
@@ -25,4 +25,4 @@ async function output(userid, maxrun) {
 		});
 	}
 }
-output(27188, 10);
+output(27188, 100);

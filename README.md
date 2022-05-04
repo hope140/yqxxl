@@ -10,4 +10,12 @@ caiyao_main.js 采药-打坐循环
 
 lianti_main.js 炼体-打坐循环
 
-gainprop.js 法宝
+gainprop.js 使用法宝
+
+drug.js 炼药一条龙
+
+outputboss.js 讨伐
+
+getgift.js 扫荡
+
+upgrade.js 升级
