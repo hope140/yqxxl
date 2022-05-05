@@ -45,5 +45,5 @@ async function* sit(userid, mapname, mapx, mapy) {
 	}
 }
 // ID 打坐地图名称 x轴位置 y轴位置
-const task = sit(20487, "琳琅境1", 3, 2)
+const task = sit(20487, "琳琅境1", 3, 12)
 task.next()
