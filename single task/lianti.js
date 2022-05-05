@@ -33,5 +33,5 @@ async function* main(userid, offlinenum) {
 	}
 }
 // ID 使用元气数量
-const task = main(27188, 0)
+const task = main(20487, 0)
 task.next()

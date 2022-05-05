@@ -160,5 +160,5 @@ async function* main(userid, drugid, lists, lv, mapname, mapx, mapy) {
 }
 
 // ID 丹方id 材料json 丹药等级 打坐地图名称 x轴位置 y轴位置
-const task = main(27188, "3", "[196436,196436,196408,248197,258439]", 40, "琳琅境1", 3, 2 )
+const task = main(20487, "3", "[196436,196436,196408,248197,258439]", 40, "琳琅境1", 3, 2 )
 task.next()

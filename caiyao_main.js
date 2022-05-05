@@ -90,5 +90,5 @@ async function* main(userid, mapname, sitmap ,mapx, mapy, offlinenum, lv) {
 	}
 }
 // ID 采药地图名称 打坐地图名称 x轴位置 y轴位置 使用元气数量 当前魂等级
-const task = main(27188, "焚灯谷2", "琳琅境1", 3, 7, 0, 5)
+const task = main(20487, "焚灯谷2", "琳琅境1", 3, 7, 0, 5)
 task.next()

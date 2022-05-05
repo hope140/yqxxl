@@ -27,4 +27,4 @@ async function gainprop(userid, gainpropid, maxrun) {
 	}
 }
 // 法宝使用，id参考法宝相关图片，最好配合定时任务使用
-gainprop(27188, 14, 1);
+gainprop(20487, 14, 1);
