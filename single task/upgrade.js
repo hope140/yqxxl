@@ -24,7 +24,7 @@ async function dazuo(userid, mapname, mapx, mapy, maxrun) {
 				console.log("气血:" + msg.data.userStateInfo.hp + "/" + msg.data.userStateInfo.hpMax + " 灵：" + msg.data.userStateInfo.linMp + "/" + msg.data.userStateInfo.linMpMax + " 魂：" + msg.data.userStateInfo.hunMp + "/" + msg.data.userStateInfo.hunMpMax);
 				userState = msg.data.userStateInfo;
 			} else if (msg.code == -3) {
-				console.log("请求超时，同时运行多个脚本或游戏未退出，请检查！");
+				console.log(msg.msg);
 				// var userState = {
 				// 			"hp": 1,
 				// 			"hpMax": 2,
@@ -43,5 +43,38 @@ async function dazuo(userid, mapname, mapx, mapy, maxrun) {
 		// 	break;
 		// }
 	}
+	task.next('打坐结束，开始下一步');
 }
-dazuo(27188, "幽木林4", 3, 7, 15);
+
+async function upgrade(userid, type) {
+	var request = require('request');
+	var options = {
+		'method': 'POST',
+		'url': 'https://yqxxl.yqbros.com/Yqxxl/User/upgradeLv',
+		'headers': {
+			'Content-Type': 'application/json'
+		},
+		body: JSON.stringify({
+			"userId": userid,
+			"type": type
+		})
+	};
+	request(options, function (error, response) {
+		// if (error) throw new Error(error);
+		msg = JSON.parse(response.body);
+		if (msg.code == 0) {
+			console.log(msg.data.msg + " 等级：" + msg.data.userLv.wuLv + "级武者" + msg.data.userLv.linLv + "级灵者" + msg.data.userLv.hunLv + "级炼药师");
+		} else {
+			console.log(msg.msg);
+		}
+	});
+	task.next('升级结束，开始下一步');
+}
+async function* main() {
+	for (let count = 0; count < 60; count++) {
+		yield upgrade(27188, 2);
+		yield dazuo(27188, "琳琅境1", 3, 2, 100);
+	}
+}
+const task = main()
+task.next()

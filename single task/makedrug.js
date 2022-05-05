@@ -1,32 +1,31 @@
 const sleep = (delay) => new Promise((resolve) => setTimeout(resolve, delay));
-async function lianti(userid, offlinenum, maxrun) {
+async function makeDrug(userid, drugid, lists, lv, maxrun) {
 	for (let count = 0; count < maxrun; count++) {
-		await sleep(4200)
-		console.log("第" + (count + 1) + "次炼体");
+		await sleep(100)
+		console.log("炼丹");
 		var request = require('request');
 		var options = {
 			'method': 'POST',
-			'url': 'https://yqxxl.yqbros.com/Yqxxl/Map/liantiStart',
+			'url': 'https://yqxxl.yqbros.com/Yqxxl/Drug/makeDrug',
 			'headers': {
 				'Content-Type': 'application/json'
 			},
 			body: JSON.stringify({
 				"userId": userid,
-				"offlineNum": offlinenum
+				"drugId": drugid,
+				"lists": lists,
+				"lv": lv
 			})
 		};
 		request(options, function (error, response) {
 			// if (error) throw new Error(error);
 			msg = JSON.parse(response.body);
 			if (msg.code == 0) {
-				console.log(msg.data.msg);
-			}else if (msg.code == -3) {
-				console.log("请求超时，同时运行多个脚本或游戏未退出，请检查！");
-			}else {
+				console.log(msg.data.msg + " 丹雷状态" + msg.data.userMakeDrug.danleiHp + "/" + msg.data.userMakeDrug.danleiHpMax);
+			} else {
 				console.log(msg.msg);
 			}
-			// console.log(msg);
 		});
 	}
 }
-lianti(27188, 0, 15);
+makeDrug(27188, "2", "[196390,196390,196393,248615,211901]", 40, 1);

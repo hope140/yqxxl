@@ -1,78 +1,94 @@
-const sleep = (delay) => new Promise((resolve) => setTimeout(resolve, delay));
-async function collection(userid, mapname, mapx, mapy, offlinenum, maxrun) {
-	for (let count = 0; count < maxrun; count++) {
-		await sleep(4200)
-		console.log("第" + (count + 1) + "次采药");
-		var request = require('request');
-		var options = {
-			'method': 'POST',
-			'url': 'https://yqxxl.yqbros.com/Yqxxl/Map/collection',
-			'headers': {
-				'Content-Type': 'application/json'
-			},
-			body: JSON.stringify({
-				"userId": userid,
-				"mapName": mapname,
-				"mapX": mapx,
-				"mapY": mapy,
-				"offlineNum": offlinenum
-			})
-		};
-		request(options, function (error, response) {
-			// if (error) throw new Error(error);
-			msg = JSON.parse(response.body);
-			if (msg.code == 0) {
-				console.log("获得材料:" + msg.data.propInfo.name, "状态：" + "魂值" + msg.data.userStateInfo.hunMp + "/" + msg.data.userStateInfo.hunMpMax + " 魂" + msg.data.userLv.hunExp);
-			} else if (msg.code == -3) {
-				console.log("请求超时，同时运行多个脚本或游戏未退出，请检查！");
-			} else {
-				console.log(msg.msg);
-			}
-			// console.log(msg);
-		});
-	}
-	task.next('采药结束，开始下一步');
+async function collection(userid, mapname, mapx, mapy, offlinenum) {
+	var request = require('request');
+	var options = {
+		'method': 'POST',
+		'url': 'https://yqxxl.yqbros.com/Yqxxl/Map/collection',
+		'headers': {
+			'Content-Type': 'application/json'
+		},
+		body: JSON.stringify({
+			"userId": userid,
+			"mapName": mapname,
+			"mapX": mapx,
+			"mapY": mapy,
+			"offlineNum": offlinenum
+		})
+	};
+	request(options, function (error, response) {
+		if (error) throw new Error(error);
+		msg = JSON.parse(response.body);
+		if (msg.code == 0) {
+			console.log("获得材料:" + msg.data.propInfo.name, "状态：" + "魂值" + msg.data.userStateInfo.hunMp + "/" + msg.data.userStateInfo.hunMpMax);
+			userhunMp = [msg.code, msg.data.userStateInfo.hunMp, msg.data.userStateInfo.hunMpMax];
+		} else {
+			console.log(msg.msg);
+			userhunMp = [msg.code, 0, 0];
+		}
+		return userhunMp;
+	});
+	// task.next("一轮采药结束");
 }
-async function dazuo(userid, mapname, mapx, mapy, maxrun) {
-	for (let count = 0; count < maxrun; count++) {
-		await sleep(4200)
+
+// 打坐函数 参数：用户ID, 打坐地点, 地图x轴位置, 地图y轴位置
+// 打坐函数 返回值：魂力
+async function dazuo(userid, mapname, mapx, mapy) {
+	var request = require('request');
+	var options = {
+		'method': 'POST',
+		'url': 'https://yqxxl.yqbros.com/Yqxxl/User/startDaZuo',
+		'headers': {
+			'Content-Type': 'application/json'
+		},
+		body: JSON.stringify({
+			"userId": userid,
+			"mapName": mapname,
+			"mapX": mapx,
+			"mapY": mapy
+		})
+	};
+	request(options, function (error, response) {
+		if (error) throw new Error(error);
+		msg = JSON.parse(response.body);
+		if (msg.code == 0) {
+			console.log("气血:" + msg.data.userStateInfo.hp + "/" + msg.data.userStateInfo.hpMax + " 灵：" + msg.data.userStateInfo.linMp + "/" + msg.data.userStateInfo.linMpMax + " 魂：" + msg.data.userStateInfo.hunMp + "/" + msg.data.userStateInfo.hunMpMax);
+			hunMp = [msg.code, msg.data.userStateInfo.hunMp, msg.data.userStateInfo.hunMpMax];
+		} else {
+			console.log(msg.msg);
+			hunMp = [msg.code, 0, 0];
+		}
+		return hunMp;
+	});
+	// task.next("一轮打坐结束");
+}
+
+// 4200毫秒间隔，气血满后自动停止打坐
+async function sit(userid, mapname, mapx, mapy) {
+	for (let count = 0; count < 30; count++) {
 		console.log("第" + (count + 1) + "次打坐");
-		var request = require('request');
-		var options = {
-			'method': 'POST',
-			'url': 'https://yqxxl.yqbros.com/Yqxxl/User/startDaZuo',
-			'headers': {
-				'Content-Type': 'application/json'
-			},
-			body: JSON.stringify({
-				"userId": userid,
-				"mapName": mapname,
-				"mapX": mapx,
-				"mapY": mapy
-			})
-		};
-		request(options, function (error, response) {
-			// if (error) throw new Error(error);
-			msg = JSON.parse(response.body);
-			if (msg.code == 0) {
-				console.log("气血:" + msg.data.userStateInfo.hp + "/" + msg.data.userStateInfo.hpMax + " 灵：" + msg.data.userStateInfo.linMp + "/" + msg.data.userStateInfo.linMpMax + " 魂：" + msg.data.userStateInfo.hunMp + "/" + msg.data.userStateInfo.hunMpMax);
-				userState = msg.data.userStateInfo;
-			} else if (msg.code == -3) {
-				console.log("请求超时，同时运行多个脚本或游戏未退出，请检查！");
-			} else {
-				console.log(msg.msg);
-			}
-		});
-	}
-	task.next('打坐结束，开始下一步');
-}
-
-async function* main() {
-	for (let count = 0; count < 5; count++) {
-		yield dazuo(27188, "殒神林1", 3, 7, 6);
-		yield collection(27188, "占雪狱7", 3, 7, 0, 9);
+		hunMp = await dazuo(userid, mapname, mapx, mapy);
+		await sleep(4200);
+		if (hunMp[0] == 0 && hunMp[1] === hunMp[2]) {
+			console.log("魂力已满，结束");
+			break;
+		}
 	}
 }
 
-const task = main()
+const sleep = (delay) => new Promise((resolve) => setTimeout(resolve, delay));
+async function* main(userid, mapname, sitmap ,mapx, mapy, offlinenum, lv) {
+	for (let count = 0; count < 100; count++) {
+		console.log("第" + (count + 1) + "次采药");
+		try {
+			userhunMp = await collection(userid, mapname, mapx, mapy, offlinenum);
+			await sleep(4200);
+			if (userhunMp[0] == 0 && userhunMp[1] < lv * 10) throw ("魂力不足");
+		} catch (Error) {
+			console.log(Error + " 开始打坐");
+			yield sit(userid, sitmap, mapx, mapy);
+			break;
+		}
+	}
+}
+// ID 采药地图名称 打坐地图名称 x轴位置 y轴位置 使用元气数量 当前魂等级
+const task = main(27188, "焚灯谷2", "琳琅境1", 3, 7, 0, 5)
 task.next()

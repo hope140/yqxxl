@@ -1,71 +1,75 @@
 const sleep = (delay) => new Promise((resolve) => setTimeout(resolve, delay));
-async function experiencedongfu(userid, type, lv, maxrun) {
+async function rewards(userid, type, id, maxrun) {
 	for (let count = 0; count < maxrun; count++) {
 		await sleep(4200)
-		console.log("第" + (count + 1) + "次副本");
+		console.log("每日任务");
 		var request = require('request');
 		var options = {
 			'method': 'POST',
-			'url': 'https://yqxxl.yqbros.com/Yqxxl/Map/experienceDongfu',
+			'url': 'https://yqxxl.yqbros.com/Yqxxl/Task/receiveRewards',
 			'headers': {
 				'Content-Type': 'application/json'
 			},
 			body: JSON.stringify({
 				"userId": userid,
 				"type": type,
-				"lv": lv
+				"id": id
 			})
 		};
 		request(options, function (error, response) {
 			// if (error) throw new Error(error);
 			msg = JSON.parse(response.body);
 			if (msg.code == 0) {
-				console.log("获得：" + msg.data.equipSuitInfos[1].name);
-			} else if (msg.code == -1) {
-				console.log("次数不足！");
+				console.log(msg.msg);
 			} else {
 				console.log(msg.msg);
 			}
 			// console.log(msg);
 		});
 	}
-	task.next('副本三次结束，开始下一步');
+	task.next('每日任务结束，开始下一步');
 }
-async function buydongfu(userid, number, maxrun) {
+async function taskreward(userid, type, maxrun) {
 	for (let count = 0; count < maxrun; count++) {
 		await sleep(4200)
-		console.log("购买次数");
+		console.log("宝箱领取");
 		var request = require('request');
 		var options = {
 			'method': 'POST',
-			'url': 'https://yqxxl.yqbros.com/Yqxxl/Map/buyDongFu',
+			'url': 'https://yqxxl.yqbros.com/Yqxxl/Task/getDailyTaskReward',
 			'headers': {
 				'Content-Type': 'application/json'
 			},
 			body: JSON.stringify({
 				"userId": userid,
-				"number": number
+				"type": type
 			})
 		};
 		request(options, function (error, response) {
 			// if (error) throw new Error(error);
 			msg = JSON.parse(response.body);
 			if (msg.code == 0) {
-				console.log("次数:" + msg.data.userDongfuInfo.number + "/" + msg.data.userDongfuInfo.maxNumber);
-			} else if (msg.code == -1) {
-				console.log("购买次数不足");
+				console.log(msg.msg);
 			} else {
 				console.log(msg.msg);
 			}
 		});
 	}
-	task.next('购买结束，开始下一步');
+	task.next('宝箱领取结束，开始下一步');
 }
+// 遍历所有的每日任务，然后领取每日宝箱，从9点宝箱开始
 
 async function* main() {
 	for (let count = 0; count < 1; count++) {
-		yield experiencedongfu(27188, 1, 30, 3);
-		yield buydongfu(27188, 3, 1);
+		for (let i = 0; i < 10; i++) {
+			yield rewards(27188, 0, i, 1);
+		}
+		for (let i = 3; i > 1; i--) {
+			yield taskreward(27188, i, 1);
+		}
+		for (let i = 0; i < 2; i++) {
+			yield rewards(27188, 5, i, 1);
+		}
 	}
 }
 const task = main()

@@ -1,19 +1,17 @@
 const sleep = (delay) => new Promise((resolve) => setTimeout(resolve, delay));
-async function getgift(userid, level ,levellevel, maxrun) {
+async function output(userid, maxrun) {
 	for (let count = 0; count < maxrun; count++) {
 		//  await sleep(100)
-		console.log("第" + (count + 1) + "次扫荡");
+		console.log("第" + (count + 1) + "次讨伐");
 		var request = require('request');
 		var options = {
 			'method': 'POST',
-			'url': 'https://yqxxl.yqbros.com/Yqxxl/GameCopy/getGameCopyGift',
+			'url': 'https://yqxxl.yqbros.com/Yqxxl/GameCopy/outPutBoss',
 			'headers': {
 				'Content-Type': 'application/json'
 			},
 			body: JSON.stringify({
 				"userId": userid,
-				"level": level,
-				"levelLevel": levellevel
 			})
 		};
 		request(options, function (error, response) {
@@ -26,13 +24,6 @@ async function getgift(userid, level ,levellevel, maxrun) {
 			}
 		});
 	}
-	task.next('扫荡结束，开始下一步');
 }
-async function* main() {
-	for (let count = 0; count < 1; count++) {
-		yield getgift(27188, 1, 2, 5);
-		yield getgift(27188, 2, 2, 5);
-	}
-}
-const task = main()
-task.next()
+// 超过5次讨伐，会被拉黑（不是）
+output(27188, 100);

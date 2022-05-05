@@ -1,74 +1,89 @@
-const sleep = (delay) => new Promise((resolve) => setTimeout(resolve, delay));
-async function lianti(userid, offlinenum, maxrun) {
-	for (let count = 0; count < maxrun; count++) {
-		await sleep(4200)
-		console.log("第" + (count + 1) + "次练体");
-		var request = require('request');
-		var options = {
-			'method': 'POST',
-			'url': 'https://yqxxl.yqbros.com/Yqxxl/Map/liantiStart',
-			'headers': {
-				'Content-Type': 'application/json'
-			},
-			body: JSON.stringify({
-				"userId": userid,
-				"offlineNum": offlinenum
-			})
-		};
-		request(options, function (error, response) {
-			// if (error) throw new Error(error);
-			msg = JSON.parse(response.body);
-			if (msg.code == 0) {
-				console.log(msg.data.msg + " 气血：" + msg.data.userStateInfo.hp + "/" + msg.data.userStateInfo.hpMax + " 灵：" + msg.data.userStateInfo.linMp + "/" + msg.data.userStateInfo.linMpMax + " 武值" + msg.data.userLv.wuExp);
-			} else if (msg.code == -3) {
-				console.log("请求超时，同时运行多个脚本或游戏未退出，请检查！");
-			} else {
-				console.log(msg.msg);
-			}
-			// console.log(msg);
-		});
-	}
-	task.next('炼体结束，开始下一步');
-}
-async function dazuo(userid, mapname, mapx, mapy, maxrun) {
-	for (let count = 0; count < maxrun; count++) {
-		await sleep(4200)
-		console.log("第" + (count + 1) + "次打坐");
-		var request = require('request');
-		var options = {
-			'method': 'POST',
-			'url': 'https://yqxxl.yqbros.com/Yqxxl/User/startDaZuo',
-			'headers': {
-				'Content-Type': 'application/json'
-			},
-			body: JSON.stringify({
-				"userId": userid,
-				"mapName": mapname,
-				"mapX": mapx,
-				"mapY": mapy
-			})
-		};
-		request(options, function (error, response) {
-			// if (error) throw new Error(error);
-			msg = JSON.parse(response.body);
-			if (msg.code == 0) {
-				console.log("气血:" + msg.data.userStateInfo.hp + "/" + msg.data.userStateInfo.hpMax + " 灵：" + msg.data.userStateInfo.linMp + "/" + msg.data.userStateInfo.linMpMax + " 魂：" + msg.data.userStateInfo.hunMp + "/" + msg.data.userStateInfo.hunMpMax);
-				userState = msg.data.userStateInfo;
-			} else if (msg.code == -3) {
-				console.log(msg.msg);
-			} else {
-				console.log(msg.msg);
-			}
-		});
-	}
-	task.next('打坐结束，开始下一步');
+async function lianti(userid, offlinenum) {
+	var request = require('request');
+	var options = {
+		'method': 'POST',
+		'url': 'https://yqxxl.yqbros.com/Yqxxl/Map/liantiStart',
+		'headers': {
+			'Content-Type': 'application/json'
+		},
+		body: JSON.stringify({
+			"userId": userid,
+			"offlineNum": offlinenum
+		})
+	};
+	request(options, function (error, response) {
+		if (error) throw new Error(error);
+		msg = JSON.parse(response.body);
+		if (msg.code == 0) {
+			console.log(msg.data.msg + " 气血：" + msg.data.userStateInfo.hp + "/" + msg.data.userStateInfo.hpMax + " 灵：" + msg.data.userStateInfo.linMp + "/" + msg.data.userStateInfo.linMpMax + " 武值" + msg.data.userLv.wuExp);
+			state = [msg.code, msg.data.userStateInfo.hp ,msg.data.userStateInfo.hpMax ,msg.data.userStateInfo.linMp, msg.data.userStateInfo.linMpMax];
+		} else {
+			console.log(msg.msg);
+			state = [msg.code, 0, 0, 0 ,0];
+		}
+	});
+	// task.next('炼体结束，开始下一步');
 }
 
-async function* main() {
-	for (let count = 0; count < 5; count++) {
-		yield dazuo(27188, "殒神林1", 3, 7, 6);
-		yield lianti(27188, 0, 84);
+async function dazuo(userid, mapname, mapx, mapy) {
+	var request = require('request');
+	var options = {
+		'method': 'POST',
+		'url': 'https://yqxxl.yqbros.com/Yqxxl/User/startDaZuo',
+		'headers': {
+			'Content-Type': 'application/json'
+		},
+		body: JSON.stringify({
+			"userId": userid,
+			"mapName": mapname,
+			"mapX": mapx,
+			"mapY": mapy
+		})
+	};
+	request(options, function (error, response) {
+		if (error) throw new Error(error);
+		msg = JSON.parse(response.body);
+		if (msg.code == 0) {
+			console.log("气血:" + msg.data.userStateInfo.hp + "/" + msg.data.userStateInfo.hpMax + " 灵：" + msg.data.userStateInfo.linMp + "/" + msg.data.userStateInfo.linMpMax + " 魂：" + msg.data.userStateInfo.hunMp + "/" + msg.data.userStateInfo.hunMpMax);
+			userstate = [msg.code, msg.data.userStateInfo.hp ,msg.data.userStateInfo.hpMax ,msg.data.userStateInfo.linMp, msg.data.userStateInfo.linMpMax];
+		} else {
+			console.log(msg.msg);
+			userstate = [msg.code, 0, 0, 0 ,0];
+		}
+		return userstate;
+	});
+	// task.next("一轮打坐结束");
+}
+
+// 4200毫秒间隔，气血满后自动停止打坐
+async function sit(userid, mapname, mapx, mapy) {
+	for (let count = 0; count < 30; count++) {
+		console.log("第" + (count + 1) + "次打坐");
+		userstate = await dazuo(userid, mapname, mapx, mapy);
+		await sleep(4200);
+		if (userstate[0] == 0 && userstate[1] === userstate[2] && userstate[3] === userstate[4]) {
+			console.log("状态已满，结束");
+			break;
+		}
 	}
 }
-const task = main()
+
+const sleep = (delay) => new Promise((resolve) => setTimeout(resolve, delay));
+async function* main(userid, mapname, mapx, mapy, offlinenum, hpconsume, linconsume) {
+	for (let count = 0; count < 100; count++) {
+		console.log("第" + (count + 1) + "次炼体");
+		try {
+			state = await lianti(userid, offlinenum);
+			await sleep(4200);
+			if (state[0] == 0 && state[1] < hpconsume) throw ("气血不足");
+			if (state[0] == 0 && state[3] < linconsume) throw ("灵气不足");
+		} catch (Error) {
+			console.log(Error + " 开始打坐");
+			yield sit(userid, mapname, mapx, mapy);
+			break;
+		}
+	}
+}
+//  ID 打坐地图名称 x轴位置 y轴位置 使用元气数量 气血消耗 灵气消耗
+const task = main(27188, "琳琅境1", 3, 2, 0, 42, 5)
 task.next()

@@ -1,31 +1,30 @@
 const sleep = (delay) => new Promise((resolve) => setTimeout(resolve, delay));
-async function makeDrug(userid, drugid, lists, lv, maxrun) {
+async function useDrug(userid, bagid, maxrun) {
 	for (let count = 0; count < maxrun; count++) {
-		 await sleep(100)
-		console.log("炼丹");
+		await sleep(100)
+		console.log("嗑药");
 		var request = require('request');
 		var options = {
 			'method': 'POST',
-			'url': 'https://yqxxl.yqbros.com/Yqxxl/Drug/makeDrug',
+			'url': 'https://yqxxl.yqbros.com/Yqxxl/Drug/useDrug',
 			'headers': {
 				'Content-Type': 'application/json'
 			},
 			body: JSON.stringify({
 				"userId": userid,
-				"drugId": drugid,
-				"lists": lists,
-				"lv": lv
+				"bagId": bagid
 			})
 		};
 		request(options, function (error, response) {
 			// if (error) throw new Error(error);
 			msg = JSON.parse(response.body);
 			if (msg.code == 0) {
-				console.log(msg.data.msg + " 丹雷状态" + msg.data.userMakeDrug.danleiHp + "/" + msg.data.userMakeDrug.danleiHpMax);
+				console.log(msg.data.msg);
 			} else {
 				console.log(msg.msg);
 			}
 		});
 	}
 }
-makeDrug(27188, "2" ,"[196390,196390,196393,248615,211901]" ,40 , 1);
+// ID 丹药ID 最大运行次数
+useDrug(27188, 101686, 1);
