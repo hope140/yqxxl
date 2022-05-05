@@ -139,6 +139,7 @@ async function* main(userid, drugid, lists, lv, mapname, mapx, mapy) {
 				drughp = await handle(userid, 1);
 				await sleep(4200);
 				if (drughp[0] == 0 && drughp[1] > 0) throw ("丹雷未消散");
+				if (drughp[0] == -1) throw ("气血已耗尽，打坐");
 				if (drughp[0] == 0 && drughp[1] < 0) break;
 			} catch (error) {
 				console.log(error + "，继续抗雷");
