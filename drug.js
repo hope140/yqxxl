@@ -77,7 +77,7 @@ async function dazuo(userid, mapname, mapx, mapy) {
 			userstate = [msg.code, msg.data.userStateInfo.hp, msg.data.userStateInfo.hpMax, msg.data.userStateInfo.linMp, msg.data.userStateInfo.linMpMax, msg.data.userStateInfo.hunMp, msg.data.userStateInfo.hunMpMax];
 		} else {
 			console.log(msg.msg);
-			userstate = [msg.code, 0, 0, 0 ,0, 0, 0];
+			userstate = [msg.code, 0, 0, 0, 0, 0, 0];
 		}
 		return userstate;
 	});
@@ -113,18 +113,6 @@ async function handle(userid, type) {
 }
 
 // 4200毫秒间隔，状态满后自动停止打坐
-async function sit(userid, mapname, mapx, mapy) {
-	for (let count = 0; count < 30; count++) {
-		console.log("第" + (count + 1) + "次打坐");
-		userstate = await dazuo(userid, mapname, mapx, mapy);
-		await sleep(4200);
-		if (userstate[0] == 0 && userstate[1] === userstate[2] && userstate[3] === userstate[4] && userstate[5] === userstate[6]) {
-			console.log("状态已满，结束");
-			break;
-		}
-	}
-}
-
 
 const sleep = (delay) => new Promise((resolve) => setTimeout(resolve, delay));
 async function* main(userid, drugid, lists, lv, mapname, mapx, mapy) {
@@ -154,9 +142,17 @@ async function* main(userid, drugid, lists, lv, mapname, mapx, mapy) {
 				}
 			}
 		}
-		} finally {
-			console.log("最后一轮打坐");
-			yield sit(userid, mapname, mapx, mapy);
+	} finally {
+		console.log("最后一轮打坐");
+		for (let count = 0; count < 30; count++) {
+			console.log("第" + (count + 1) + "次打坐");
+			userstate = await dazuo(userid, mapname, mapx, mapy);
+			await sleep(4200);
+			if (userstate[0] == 0 && userstate[1] === userstate[2] && userstate[3] === userstate[4] && userstate[5] === userstate[6]) {
+				console.log("状态已满，结束");
+				break;
+			}
+		}
 	}
 }
 
@@ -173,10 +169,10 @@ async function* main(userid, drugid, lists, lv, mapname, mapx, mapy) {
 // const task = main(20487, "3", "[258424,258424,249929,248198,248614]", 40, "琳琅境1", 3, 12 )
 
 // 凝神
-// const task = main(20487, "12", "[248198, 248198, 248198, 248198, 248198]", 20, "琳琅境1", 3, 12 )
+const task = main(20487, "12", "[248198, 248198, 248198, 248198, 248198]", 20, "琳琅境1", 3, 12 )
 
 // 金神
-const task = main(20487, "19", "[212202, 212202, 212202, 277475, 229376]", 40, "琳琅境1", 3, 12 )
+// const task = main(20487, "19", "[212202, 212202, 212202, 277475, 229376]", 40, "琳琅境1", 3, 12)
 
 // 淬体
 // const task = main(20487, "20", "[258424, 258424, 258424, 196408, 229376]", 40, "琳琅境1", 3, 12 )
