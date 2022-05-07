@@ -84,18 +84,6 @@ async function handle(userid, type) {
 }
 
 // 4200毫秒间隔，状态满后自动停止打坐
-async function sit(userid, mapname, mapx, mapy) {
-	for (let count = 0; count < 30; count++) {
-		console.log("第" + (count + 1) + "次打坐");
-		userstate = await dazuo(userid, mapname, mapx, mapy);
-		await sleep(4200);
-		if (userstate[0] == 0 && userstate[1] === userstate[2] && userstate[3] === userstate[4] && userstate[5] === userstate[6]) {
-			console.log("状态已满，结束");
-			break;
-		}
-	}
-}
-
 
 const sleep = (delay) => new Promise((resolve) => setTimeout(resolve, delay));
 async function* main(userid, mapname, mapx, mapy) {
@@ -109,7 +97,7 @@ async function* main(userid, mapname, mapx, mapy) {
 			if (drughp[0] == 0 && drughp[1] < 0) break;
 		} catch (error) {
 			console.log(error + "，继续抗雷");
-			for (let count = 0; count < 25; count++) {
+			for (let count = 0; count < 30; count++) {
 				console.log("第" + (count + 1) + "次打坐");
 				userstate = await dazuo(userid, mapname, mapx, mapy);
 				await sleep(4200);
@@ -121,7 +109,15 @@ async function* main(userid, mapname, mapx, mapy) {
 		}
 	}
 	console.log("最后一轮打坐");
-	yield sit(userid, mapname, mapx, mapy);
+	for (let count = 0; count < 30; count++) {
+		console.log("第" + (count + 1) + "次打坐");
+		userstate = await dazuo(userid, mapname, mapx, mapy);
+		await sleep(4200);
+		if (userstate[0] == 0 && userstate[1] === userstate[2] && userstate[3] === userstate[4] && userstate[5] === userstate[6]) {
+			console.log("状态已满，结束");
+			break;
+		}
+	}
 }
 // ID 打坐地图名称 x轴位置 y轴位置
 const task = main(20487, "琳琅境1", 3, 12)

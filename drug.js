@@ -131,7 +131,7 @@ async function* main(userid, drugid, lists, lv, mapname, mapx, mapy) {
 				if (drughp[0] == 0 && drughp[1] < 0) break;
 			} catch (error) {
 				console.log(error + "，继续抗雷");
-				for (let count = 0; count < 25; count++) {
+				for (let count = 0; count < 30; count++) {
 					console.log("第" + (count + 1) + "次打坐");
 					userstate = await dazuo(userid, mapname, mapx, mapy);
 					await sleep(4200);
@@ -167,9 +167,10 @@ async function* main(userid, drugid, lists, lv, mapname, mapx, mapy) {
 // 聚气
 // const task = main(20487, "3", "[248615,248615,277475,277665,258439]", 50, "琳琅境1", 3, 12 )
 // const task = main(20487, "3", "[258424,258424,249929,248198,248614]", 40, "琳琅境1", 3, 12 )
+const task = main(20487, "3", "[248617,248617,229398,248198,249919]", 40, "琳琅境1", 3, 12 )
 
 // 凝神
-const task = main(20487, "12", "[248198, 248198, 248198, 248198, 248198]", 20, "琳琅境1", 3, 12 )
+// const task = main(20487, "12", "[248198, 248198, 248198, 248198, 248198]", 20, "琳琅境1", 3, 12 )
 
 // 金神
 // const task = main(20487, "19", "[212202, 212202, 212202, 277475, 229376]", 40, "琳琅境1", 3, 12)

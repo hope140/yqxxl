@@ -70,7 +70,7 @@ async function* main(userid, mapname, mapx, mapy, offlinenum) {
 		try {
 			state = await experience(userid, mapname, mapx, mapy, offlinenum);
 			await sleep(4200);
-			if (state[0] == 0 && state[1] < state[2] / 20 && state[3] < state[4] / 20 && state[5] < state[6] / 20) throw ("状态不佳");
+			if (state[0] == 0 && state[1] < state[2] / 10 && state[3] < state[4] / 10 && state[5] < state[6] / 10) throw ("状态不佳");
 			if (state[0] == -2) throw ("凉凉了");
 		} catch (error) {
 			console.log(error + "，开始打坐");
