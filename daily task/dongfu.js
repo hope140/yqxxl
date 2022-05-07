@@ -65,9 +65,9 @@ async function buydongfu(userid, number, maxrun) {
 // 洞府副本，获取物品json还有问题，有时候会返回两个，不过优先级不高，暂不处理
 async function* main() {
 	for (let count = 0; count < 1; count++) {
-		yield experiencedongfu(20487, 1, 30, 3);
-		yield buydongfu(20487, 3, 1);
-		yield experiencedongfu(20487, 1, 30, 3);
+		yield experiencedongfu(21487, 1, 30, 3);
+		yield buydongfu(21487, 3, 1);
+		yield experiencedongfu(21487, 1, 30, 3);
 	}
 }
 const task = main()

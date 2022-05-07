@@ -29,12 +29,12 @@ async function gainprop(userid, gainpropid, maxrun) {
 }
 // 法宝使用，现所有主动法宝，最好配合定时任务使用
 async function* main() {
-	yield gainprop(20487, 1, 1);
-	yield gainprop(20487, 2, 1);
-	yield gainprop(20487, 3, 1);
-	yield gainprop(20487, 7, 1);
-	yield gainprop(20487, 14, 1);
-	yield gainprop(20487, 19, 1);
+	yield gainprop(21487, 1, 1);
+	yield gainprop(21487, 2, 1);
+	yield gainprop(21487, 3, 1);
+	yield gainprop(21487, 7, 1);
+	yield gainprop(21487, 14, 1);
+	yield gainprop(21487, 19, 1);
 }
 const task = main()
 task.next()

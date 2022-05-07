@@ -26,4 +26,4 @@ async function output(userid, maxrun) {
 	}
 }
 // 超过5次讨伐，会被拉黑（不是）
-output(20487, 8);
+output(21487, 8);

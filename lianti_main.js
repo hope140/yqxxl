@@ -81,5 +81,5 @@ async function* main(userid, mapname, mapx, mapy, offlinenum, hpconsume, lincons
 	}
 }
 //  ID 打坐地图名称 x轴位置 y轴位置 使用元气数量 气血消耗 灵气消耗（消耗没必要写真实值，写大点更稳定）
-const task = main(20487, "琳琅境1", 3, 12, 0, 100, 20)
+const task = main(21487, "琳琅境1", 3, 12, 0, 100, 20)
 task.next()

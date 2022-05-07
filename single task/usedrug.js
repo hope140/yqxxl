@@ -27,4 +27,4 @@ async function useDrug(userid, bagid, maxrun) {
 	}
 }
 // ID 丹药ID 最大运行次数
-useDrug(20487, 101686, 1);
+useDrug(21487, 101686, 1);
