@@ -62,33 +62,30 @@ async function dazuo(userid, mapname, mapx, mapy) {
 }
 
 // 4200毫秒间隔，气血满后自动停止打坐
-async function sit(userid, mapname, mapx, mapy) {
-	for (let count = 0; count < 30; count++) {
-		console.log("第" + (count + 1) + "次打坐");
-		hunMp = await dazuo(userid, mapname, mapx, mapy);
-		await sleep(4200);
-		if (hunMp[0] == 0 && hunMp[1] === hunMp[2]) {
-			console.log("魂力已满，结束");
-			break;
-		}
-	}
-}
 
 const sleep = (delay) => new Promise((resolve) => setTimeout(resolve, delay));
-async function* main(userid, mapname, sitmap ,mapx, mapy, offlinenum, lv) {
+async function* main(userid, mapname, sitmap, mapx, mapy, offlinenum, lv) {
 	for (let count = 0; count < 100; count++) {
 		console.log("第" + (count + 1) + "次采药");
 		try {
 			userhunMp = await collection(userid, mapname, mapx, mapy, offlinenum);
 			await sleep(4200);
 			if (userhunMp[0] == 0 && userhunMp[1] < lv * 10) throw ("魂力不足");
+			if (userhunMp[0] == -1) throw ("采药失败，魂力不足");
 		} catch (Error) {
 			console.log(Error + " 开始打坐");
-			yield sit(userid, sitmap, mapx, mapy);
-			break;
+			for (let count = 0; count < 30; count++) {
+				console.log("第" + (count + 1) + "次打坐");
+				hunMp = await dazuo(userid, mapname, mapx, mapy);
+				await sleep(4200);
+				if (hunMp[0] == 0 && hunMp[1] === hunMp[2]) {
+					console.log("魂力已满，结束");
+					break;
+				}
+			}
 		}
 	}
 }
 // ID 采药地图名称 打坐地图名称 x轴位置 y轴位置 使用元气数量 当前魂等级
-const task = main(27188, "焚灯谷2", "琳琅境1", 3, 7, 0, 5)
+const task = main(20487, "焚灯谷2", "琳琅境1", 3, 12, 0, 5)
 task.next()

@@ -28,4 +28,4 @@ async function makeDrug(userid, drugid, lists, lv, maxrun) {
 		});
 	}
 }
-makeDrug(27188, "2", "[196390,196390,196393,248615,211901]", 40, 1);
+makeDrug(20487, "2", "[196390,196390,196393,248615,211901]", 40, 1);

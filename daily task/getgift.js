@@ -1,7 +1,7 @@
 const sleep = (delay) => new Promise((resolve) => setTimeout(resolve, delay));
 async function getgift(userid, level ,levellevel, maxrun) {
 	for (let count = 0; count < maxrun; count++) {
-		await sleep(100)
+		await sleep(1000)
 		console.log("第" + (count + 1) + "次扫荡");
 		var request = require('request');
 		var options = {
@@ -32,8 +32,8 @@ async function getgift(userid, level ,levellevel, maxrun) {
 // 扫荡，level为扫荡的关卡，levellevel为关卡的种类，maxrun为扫荡的次数，次数为6保证扫荡成功
 async function* main() {
 	for (let count = 0; count < 1; count++) {
-		yield getgift(27188, 1, 2, 6);
-		yield getgift(27188, 2, 2, 6);
+		yield getgift(20487, 1, 2, 6);
+		yield getgift(20487, 2, 2, 6);
 	}
 }
 const task = main()

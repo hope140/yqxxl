@@ -105,6 +105,7 @@ async function* main(userid, mapname, mapx, mapy) {
 			drughp = await handle(userid, 1);
 			await sleep(4200);
 			if (drughp[0] == 0 && drughp[1] > 0) throw ("丹雷未消散");
+			if (drughp[0] == -1) throw ("气血已耗尽，打坐");
 			if (drughp[0] == 0 && drughp[1] < 0) break;
 		} catch (error) {
 			console.log(error + "，继续抗雷");
@@ -117,12 +118,11 @@ async function* main(userid, mapname, mapx, mapy) {
 					break;
 				}
 			}
-		} finally {
-			console.log("最后一轮打坐");
-			yield sit(userid, mapname, mapx, mapy);
 		}
 	}
+	console.log("最后一轮打坐");
+	yield sit(userid, mapname, mapx, mapy);
 }
 // ID 打坐地图名称 x轴位置 y轴位置
-const task = main(27188, "琳琅境1", 3, 2)
+const task = main(20487, "琳琅境1", 3, 12)
 task.next()
