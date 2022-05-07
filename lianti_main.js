@@ -16,10 +16,10 @@ async function lianti(userid, offlinenum) {
 		msg = JSON.parse(response.body);
 		if (msg.code == 0) {
 			console.log(msg.data.msg + " 气血：" + msg.data.userStateInfo.hp + "/" + msg.data.userStateInfo.hpMax + " 灵：" + msg.data.userStateInfo.linMp + "/" + msg.data.userStateInfo.linMpMax + " 武值" + msg.data.userLv.wuExp);
-			state = [msg.code, msg.data.userStateInfo.hp ,msg.data.userStateInfo.hpMax ,msg.data.userStateInfo.linMp, msg.data.userStateInfo.linMpMax];
+			state = [msg.code, msg.data.userStateInfo.hp, msg.data.userStateInfo.hpMax, msg.data.userStateInfo.linMp, msg.data.userStateInfo.linMpMax];
 		} else {
 			console.log(msg.msg);
-			state = [msg.code, 0, 0, 0 ,0];
+			state = [msg.code, 0, 0, 0, 0];
 		}
 	});
 	// task.next('炼体结束，开始下一步');
@@ -45,10 +45,10 @@ async function dazuo(userid, mapname, mapx, mapy) {
 		msg = JSON.parse(response.body);
 		if (msg.code == 0) {
 			console.log("气血:" + msg.data.userStateInfo.hp + "/" + msg.data.userStateInfo.hpMax + " 灵：" + msg.data.userStateInfo.linMp + "/" + msg.data.userStateInfo.linMpMax + " 魂：" + msg.data.userStateInfo.hunMp + "/" + msg.data.userStateInfo.hunMpMax);
-			userstate = [msg.code, msg.data.userStateInfo.hp ,msg.data.userStateInfo.hpMax ,msg.data.userStateInfo.linMp, msg.data.userStateInfo.linMpMax];
+			userstate = [msg.code, msg.data.userStateInfo.hp, msg.data.userStateInfo.hpMax, msg.data.userStateInfo.linMp, msg.data.userStateInfo.linMpMax];
 		} else {
 			console.log(msg.msg);
-			userstate = [msg.code, 0, 0, 0 ,0];
+			userstate = [msg.code, 0, 0, 0, 0];
 		}
 		return userstate;
 	});
@@ -56,17 +56,6 @@ async function dazuo(userid, mapname, mapx, mapy) {
 }
 
 // 4200毫秒间隔，气血满后自动停止打坐
-async function sit(userid, mapname, mapx, mapy) {
-	for (let count = 0; count < 30; count++) {
-		console.log("第" + (count + 1) + "次打坐");
-		userstate = await dazuo(userid, mapname, mapx, mapy);
-		await sleep(4200);
-		if (userstate[0] == 0 && userstate[1] === userstate[2] && userstate[3] === userstate[4]) {
-			console.log("状态已满，结束");
-			break;
-		}
-	}
-}
 
 const sleep = (delay) => new Promise((resolve) => setTimeout(resolve, delay));
 async function* main(userid, mapname, mapx, mapy, offlinenum, hpconsume, linconsume) {
@@ -79,11 +68,18 @@ async function* main(userid, mapname, mapx, mapy, offlinenum, hpconsume, lincons
 			if (state[0] == 0 && state[3] < linconsume) throw ("灵气不足");
 		} catch (Error) {
 			console.log(Error + " 开始打坐");
-			yield sit(userid, mapname, mapx, mapy);
-			break;
+			for (let count = 0; count < 30; count++) {
+				console.log("第" + (count + 1) + "次打坐");
+				userstate = await dazuo(userid, mapname, mapx, mapy);
+				await sleep(4200);
+				if (userstate[0] == 0 && userstate[1] === userstate[2] && userstate[3] === userstate[4]) {
+					console.log("状态已满，结束");
+					break;
+				}
+			}
 		}
 	}
 }
-//  ID 打坐地图名称 x轴位置 y轴位置 使用元气数量 气血消耗 灵气消耗
-const task = main(20487, "琳琅境1", 3, 12, 0, 42, 5)
+//  ID 打坐地图名称 x轴位置 y轴位置 使用元气数量 气血消耗 灵气消耗（消耗没必要写真实值，写大点更稳定）
+const task = main(20487, "琳琅境1", 3, 12, 0, 100, 20)
 task.next()
