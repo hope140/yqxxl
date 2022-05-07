@@ -1,7 +1,7 @@
 const sleep = (delay) => new Promise((resolve) => setTimeout(resolve, delay));
 async function output(userid, maxrun) {
 	for (let count = 0; count < maxrun; count++) {
-		//  await sleep(100)
+		await sleep(1000)
 		console.log("第" + (count + 1) + "次讨伐");
 		var request = require('request');
 		var options = {
@@ -26,4 +26,4 @@ async function output(userid, maxrun) {
 	}
 }
 // 超过5次讨伐，会被拉黑（不是）
-output(20487, 100);
+output(20487, 8);

@@ -1,7 +1,7 @@
 const sleep = (delay) => new Promise((resolve) => setTimeout(resolve, delay));
 async function getgift(userid, level ,levellevel, maxrun) {
 	for (let count = 0; count < maxrun; count++) {
-		await sleep(100)
+		await sleep(1000)
 		console.log("第" + (count + 1) + "次扫荡");
 		var request = require('request');
 		var options = {

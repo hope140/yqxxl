@@ -82,6 +82,7 @@ async function* main(userid, mapname, sitmap ,mapx, mapy, offlinenum, lv) {
 			userhunMp = await collection(userid, mapname, mapx, mapy, offlinenum);
 			await sleep(4200);
 			if (userhunMp[0] == 0 && userhunMp[1] < lv * 10) throw ("魂力不足");
+			if (userhunMp[0] == -1) throw ("采药失败，魂力不足");
 		} catch (Error) {
 			console.log(Error + " 开始打坐");
 			yield sit(userid, sitmap, mapx, mapy);
