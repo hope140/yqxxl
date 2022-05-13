@@ -70,8 +70,10 @@ async function* main(userid, mapname, mapx, mapy, offlinenum) {
 		try {
 			state = await experience(userid, mapname, mapx, mapy, offlinenum);
 			await sleep(4200);
-			if (state[0] == 0 && state[1] < state[2] / 10 && state[3] < state[4] / 10 && state[5] < state[6] / 10) throw ("状态不佳");
-			if (state[0] == -2) throw ("凉凉了");
+			if (state[0] == 0 && state[1] < state[2] / 10 ) throw ("气血不足");
+			if (state[0] == 0 && state[3] < state[4] / 10 ) throw ("灵力不足");
+			if (state[0] == 0 && state[5] < state[6] / 10 ) throw ("魂力不足");
+			if (state[0] == -2) throw ("身体被掏空");
 		} catch (error) {
 			console.log(error + "，开始打坐");
 			for (let count = 0; count < 25; count++) {
@@ -88,5 +90,5 @@ async function* main(userid, mapname, mapx, mapy, offlinenum) {
 }
 
 // ID 历练地图名称 x轴位置 y轴位置 使用元气数量
-const task = main(20487, "炎龙谷1", 12, 3, 0)
+const task = main(20487, "琳琅境1", 3, 12, 0)
 task.next()
