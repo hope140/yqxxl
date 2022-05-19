@@ -62,13 +62,13 @@ async function taskreward(userid, type, maxrun) {
 async function* main() {
 	for (let count = 0; count < 1; count++) {
 		for (let i = 0; i < 10; i++) {
-			yield rewards(20487, 0, i, 1);
+			yield rewards("4837a285-bb1a-4f9a-886e-946a3e11597a", 0, i, 1);
 		}
 		for (let i = 3; i > 1; i--) {
-			yield taskreward(20487, i, 1);
+			yield taskreward("4837a285-bb1a-4f9a-886e-946a3e11597a", i, 1);
 		}
 		for (let i = 0; i < 2; i++) {
-			yield rewards(20487, 5, i, 1);
+			yield rewards("4837a285-bb1a-4f9a-886e-946a3e11597a", 5, i, 1);
 		}
 	}
 }

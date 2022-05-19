@@ -29,10 +29,10 @@ async function field(fieldid) {
 
 async function* main() {
 	console.log("收获药田")
-	yield field(2430);
-	yield field(2431);
-	yield field(2480);
-	yield field(2519);
+	yield field(2818);
+	yield field(2819);
+	yield field(2820);
+	yield field(2821);
 }
 const task = main()
 task.next()

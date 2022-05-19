@@ -120,5 +120,5 @@ async function* main(userid, mapname, mapx, mapy) {
 	}
 }
 // ID 打坐地图名称 x轴位置 y轴位置
-const task = main(20487, "琳琅境1", 3, 12)
+const task = main("4837a285-bb1a-4f9a-886e-946a3e11597a", "殒神林2", 4, 2, 0)
 task.next()

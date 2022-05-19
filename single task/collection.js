@@ -39,5 +39,5 @@ async function* main(userid, mapname, mapx, mapy, offlinenum) {
 	}
 }
 // ID 采药地图名称 x轴位置 y轴位置 使用元气数量
-const task = main(20487, "焚灯谷2", 3, 7, 0)
+const task = main("4837a285-bb1a-4f9a-886e-946a3e11597a", "殒神林1", 3, 7, 0)
 task.next()

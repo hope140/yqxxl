@@ -64,7 +64,7 @@ async function dazuo(userid, mapname, mapx, mapy) {
 
 // 主函数，打不过怪会报错
 const sleep = (delay) => new Promise((resolve) => setTimeout(resolve, delay));
-async function* main(userid, mapname, mapx, mapy, offlinenum) {
+async function* main(userid, mapname, sitmap, mapx, mapy, offlinenum) {
 	for (let count = 0; count < 100; count++) {
 		console.log("第" + (count + 1) + "次历练");
 		try {
@@ -78,7 +78,7 @@ async function* main(userid, mapname, mapx, mapy, offlinenum) {
 			console.log(error + "，开始打坐");
 			for (let count = 0; count < 25; count++) {
 				console.log("第" + (count + 1) + "次打坐");
-				userstate = await dazuo(userid, mapname, mapx, mapy);
+				userstate = await dazuo(userid, sitmap, mapx, mapy);
 				await sleep(4200);
 				if (userstate[0] == 0 && userstate[1] === userstate[2] && userstate[3] === userstate[4] && userstate[5] === userstate[6]) {
 					console.log("状态已满，打坐结束");
@@ -90,5 +90,5 @@ async function* main(userid, mapname, mapx, mapy, offlinenum) {
 }
 
 // ID 历练地图名称 x轴位置 y轴位置 使用元气数量
-const task = main(20487, "琳琅境1", 3, 12, 0)
+const task = main("4837a285-bb1a-4f9a-886e-946a3e11597a", "无极山1", "殒神林2",1, 2, 0)
 task.next()
