@@ -33,7 +33,7 @@ async function collection(userid, mapname, mapx, mapy, offlinenum) {
 const sleep = (delay) => new Promise((resolve) => setTimeout(resolve, delay));
 async function* main(userid, mapname, mapx, mapy, offlinenum) {
 	for (let count = 0; count < 100; count++) {
-		console.log("第" + (count + 1) + "次采药");
+		console.log("***第" + (count + 1) + "次采药***");
 		collection(userid, mapname, mapx, mapy, offlinenum);
 		await sleep(4200)
 	}

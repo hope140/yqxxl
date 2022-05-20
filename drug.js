@@ -121,7 +121,7 @@ async function* main(userid, drugid, lists, lv, mapname, mapx, mapy) {
 		await sleep(1000);
 		if (drugstate[0] == 0 && drugstate[1] > 0) throw ("丹雷出现");
 	} catch (error) {
-		console.log(error + "，开始抗雷");
+		console.log("***" + error + "，开始抗雷***");
 		for (let count = 0; count < 30; count++) {
 			try {
 				drughp = await handle(userid, 1);
@@ -133,19 +133,19 @@ async function* main(userid, drugid, lists, lv, mapname, mapx, mapy) {
 				if (drughp[0] == 0 && drughp[1] < 0) break;
 				if (drughp[0] == -1 && drughp[3] == "异常信息") break;
 			} catch (error) {
-				console.log(error + "，打坐");
+				console.log("***" + error + "，打坐***");
 				userstate = await dazuo(userid, mapname, mapx, mapy);
 				await sleep(4200);
 			}
 		}
 	} finally {
-		console.log("最后一轮打坐");
+		console.log("***最后一轮打坐***");
 		for (let count = 0; count < 30; count++) {
-			console.log("第" + (count + 1) + "次打坐");
+			console.log("***第" + (count + 1) + "次打坐***");
 			userstate = await dazuo(userid, mapname, mapx, mapy);
 			await sleep(4200);
 			if (userstate[0] == 0 && userstate[1] === userstate[2] && userstate[3] === userstate[4] && userstate[5] === userstate[6]) {
-				console.log("状态已满，结束");
+				console.log("***状态已满，结束***");
 				break;
 			}
 		}
@@ -173,8 +173,8 @@ async function* main(userid, drugid, lists, lv, mapname, mapx, mapy) {
 // const task = main("4837a285-bb1a-4f9a-886e-946a3e11597a", "3", "[196436,196436,196408,229358,212231]", 20, "殒神林2", 1, 2 )
 // const task = main("4837a285-bb1a-4f9a-886e-946a3e11597a", "3", "[200437,200437,226063,249034,212231]", 30, "殒神林2", 1, 2 )
 // const task = main("4837a285-bb1a-4f9a-886e-946a3e11597a", "3", "[249933,249933,249929,249861,212204]", 40, "殒神林2", 1, 2 )
-const task = main("4837a285-bb1a-4f9a-886e-946a3e11597a", "3", "[196436,196436,278590,277483,281751]", 60, "殒神林2", 1, 2 )
-
+// const task = main("4837a285-bb1a-4f9a-886e-946a3e11597a", "3", "[196436,196436,278590,277483,281751]", 60, "殒神林2", 1, 2 )
+const task = main("4837a285-bb1a-4f9a-886e-946a3e11597a", "3", "[226062,196436,277478,226064,281748]", 40, "殒神林2", 1, 2 )
 
 // 聚液
 // const task = main("4837a285-bb1a-4f9a-886e-946a3e11597a", "4", "[212201, 212201, 249859, 277484, 281037]", 60, "殒神林2", 1, 2 )

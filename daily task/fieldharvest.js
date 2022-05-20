@@ -28,7 +28,7 @@ async function field(fieldid) {
 // 药田收获，填写药田编号
 
 async function* main() {
-	console.log("收获药田")
+	console.log("***收获药田***")
 	yield field(2818);
 	yield field(2819);
 	yield field(2820);

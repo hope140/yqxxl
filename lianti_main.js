@@ -60,20 +60,20 @@ async function dazuo(userid, mapname, mapx, mapy) {
 const sleep = (delay) => new Promise((resolve) => setTimeout(resolve, delay));
 async function* main(userid, mapname, mapx, mapy, offlinenum) {
 	for (let count = 0; count < 100; count++) {
-		console.log("第" + (count + 1) + "次炼体");
+		console.log("***第" + (count + 1) + "次炼体***");
 		try {
 			state = await lianti(userid, offlinenum);
 			await sleep(4200);
 			if (state[0] == 0 && state[1] < state[2]/10) throw ("气血不足");
 			if (state[0] == 0 && state[3] < state[4]/10) throw ("灵气不足");
 		} catch (Error) {
-			console.log(Error + " 开始打坐");
+			console.log("***" + Error + " 开始打坐***");
 			for (let count = 0; count < 30; count++) {
-				console.log("第" + (count + 1) + "次打坐");
+				console.log("***第" + (count + 1) + "次打坐***");
 				userstate = await dazuo(userid, mapname, mapx, mapy);
 				await sleep(4200);
 				if (userstate[0] == 0 && userstate[1] === userstate[2] && userstate[3] === userstate[4]) {
-					console.log("状态已满，结束");
+					console.log("***状态已满，结束***");
 					break;
 				}
 			}
