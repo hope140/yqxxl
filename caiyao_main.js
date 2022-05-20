@@ -66,7 +66,7 @@ async function dazuo(userid, mapname, mapx, mapy) {
 const sleep = (delay) => new Promise((resolve) => setTimeout(resolve, delay));
 async function* main(userid, mapname, sitmap, mapx, mapy, offlinenum, lv) {
 	for (let count = 0; count < 100; count++) {
-		console.log("***第" + (count + 1) + "次采药***");
+		console.log("第" + (count + 1) + "次采药");
 		try {
 			userhunMp = await collection(userid, mapname, mapx, mapy, offlinenum);
 			await sleep(4200);
@@ -75,7 +75,7 @@ async function* main(userid, mapname, sitmap, mapx, mapy, offlinenum, lv) {
 		} catch (Error) {
 			console.log("***" + Error + " 开始打坐***");
 			for (let count = 0; count < 30; count++) {
-				console.log("***第" + (count + 1) + "次打坐***");
+				console.log("第" + (count + 1) + "次打坐");
 				hunMp = await dazuo(userid, sitmap, mapx, mapy);
 				await sleep(4200);
 				if (hunMp[0] == 0 && hunMp[1] === hunMp[2]) {

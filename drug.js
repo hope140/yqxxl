@@ -141,7 +141,7 @@ async function* main(userid, drugid, lists, lv, mapname, mapx, mapy) {
 	} finally {
 		console.log("***最后一轮打坐***");
 		for (let count = 0; count < 30; count++) {
-			console.log("***第" + (count + 1) + "次打坐***");
+			console.log("第" + (count + 1) + "次打坐");
 			userstate = await dazuo(userid, mapname, mapx, mapy);
 			await sleep(4200);
 			if (userstate[0] == 0 && userstate[1] === userstate[2] && userstate[3] === userstate[4] && userstate[5] === userstate[6]) {
