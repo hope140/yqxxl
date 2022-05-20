@@ -29,11 +29,11 @@ async function getgift(userid, level ,levellevel, maxrun) {
 	task.next('扫荡结束，开始下一步');
 }
 
-// 扫荡，level为扫荡的关卡，levellevel为关卡的种类，maxrun为扫荡的次数，次数为6保证扫荡成功
+// 扫荡，level为扫荡的关卡，levellevel为关卡的种类，maxrun为扫荡的次数，次数为8保证扫荡成功
 async function* main() {
 	for (let count = 0; count < 1; count++) {
-		yield getgift("4837a285-bb1a-4f9a-886e-946a3e11597a", 1, 2, 6);
-		yield getgift("4837a285-bb1a-4f9a-886e-946a3e11597a", 2, 2, 6);
+		yield getgift("4837a285-bb1a-4f9a-886e-946a3e11597a", 1, 2, 8);
+		yield getgift("4837a285-bb1a-4f9a-886e-946a3e11597a", 2, 2, 8);
 	}
 }
 const task = main()

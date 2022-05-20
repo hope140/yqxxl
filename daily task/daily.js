@@ -59,18 +59,44 @@ async function taskreward(userid, type, maxrun) {
 }
 // 遍历所有的每日任务，然后领取每日宝箱，从9点宝箱开始
 
+async function getFieldGift(userid) {
+	await sleep(4200)
+	console.log("药田次数领取");
+	var request = require('request');
+	var options = {
+		'method': 'POST',
+		'url': 'https://yqxxl.yqbros.com/Yqxxl/Field/getFieldGift',
+		'headers': {
+			'Content-Type': 'application/json'
+		},
+		body: JSON.stringify({
+			"userId": userid
+		})
+	};
+	request(options, function (error, response) {
+		if (error) throw new Error(error);
+		msg = JSON.parse(response.body);
+		if (msg.code == 0) {
+			console.log(msg.msg);
+		} else {
+			console.log(msg.msg);
+		}
+	});
+	task.next('药田次数领取结束，开始下一步');
+}
+
+
 async function* main() {
-	for (let count = 0; count < 1; count++) {
-		for (let i = 0; i < 10; i++) {
-			yield rewards("4837a285-bb1a-4f9a-886e-946a3e11597a", 0, i, 1);
-		}
-		for (let i = 3; i > 1; i--) {
-			yield taskreward("4837a285-bb1a-4f9a-886e-946a3e11597a", i, 1);
-		}
-		for (let i = 0; i < 2; i++) {
-			yield rewards("4837a285-bb1a-4f9a-886e-946a3e11597a", 5, i, 1);
-		}
+	for (let i = 0; i < 10; i++) {
+		yield rewards("4837a285-bb1a-4f9a-886e-946a3e11597a", 0, i, 1);
 	}
+	for (let i = 3; i > 1; i--) {
+		yield taskreward("4837a285-bb1a-4f9a-886e-946a3e11597a", i, 1);
+	}
+	for (let i = 0; i < 2; i++) {
+		yield rewards("4837a285-bb1a-4f9a-886e-946a3e11597a", 5, i, 1);
+	}
+	yield getFieldGift("4837a285-bb1a-4f9a-886e-946a3e11597a");
 }
 const task = main()
 task.next()
