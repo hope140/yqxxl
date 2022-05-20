@@ -87,5 +87,5 @@ async function* main(userid, mapname, sitmap, mapx, mapy, offlinenum, lv) {
 	}
 }
 // ID 采药地图名称 打坐地图名称 x轴位置 y轴位置 使用元气数量 当前魂等级
-const task = main("4837a285-bb1a-4f9a-886e-946a3e11597a", "殒神林1", "殒神林2", 3, 12, 0, 5)
+const task = main("4837a285-bb1a-4f9a-886e-946a3e11597a", "殒神林1", "殒神林2", 1, 2, 0, 5)
 task.next()

@@ -91,7 +91,9 @@ async function* main(userid, mapname, mapx, mapy) {
 	for (let count = 0; count < 30; count++) {
 		try {
 			drughp = await handle(userid, 1);
-			await sleep(4200);
+			await sleep(100);
+			drughp = await handle(userid, 2);
+			await sleep(200);
 			if (drughp[0] == 0 && drughp[1] > 0) throw ("丹雷未消散");
 			if (drughp[0] == -1) throw ("气血已耗尽，打坐");
 			if (drughp[0] == 0 && drughp[1] < 0) break;
