@@ -1,6 +1,7 @@
 const sleep = (delay) => new Promise((resolve) => setTimeout(resolve, delay));
 async function createLieMoRoom(userid, roomName, roomPassWord, difficulty, palyerNum) {
 	console.log("***创建猎魔房间***");
+	await sleep(100)
 	var request = require('request');
 	var options = {
 		'method': 'POST',
@@ -20,7 +21,8 @@ async function createLieMoRoom(userid, roomName, roomPassWord, difficulty, palye
 		if (error) throw new Error(error);
 		msg = JSON.parse(response.body);
 		if (msg.code == 0) {
-			console.log(msg.data.playerNum + "人队伍" + "，名称：" + msg.data.lieMoRoomInfo.roomName + "，难度：" + msg.data.lieMoRoomInfo.difficulty);
+			// console.log(`${msg.data.playerNum}人队伍，名称：${msg.data.lieMoRoomInfo.roomName}，难度：${msg.data.lieMoRoomInfo.difficulty}`);
+			console.log(msg);
 		} else {
 			console.log("创建失败，" + msg.msg);
 		}

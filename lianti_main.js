@@ -80,6 +80,6 @@ async function* main(userid, mapname, mapx, mapy, offlinenum) {
 		}
 	}
 }
-//  ID 打坐地图名称 x轴位置 y轴位置 使用元气数量 气血消耗 灵气消耗（消耗没必要写真实值，写大点更稳定）
+//  ID 打坐地图名称 x轴位置 y轴位置 使用元气数量
 const task = main("4837a285-bb1a-4f9a-886e-946a3e11597a", "殒神林2", 1, 2, 0)
 task.next()

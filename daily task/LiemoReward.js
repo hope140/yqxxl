@@ -19,7 +19,9 @@ async function getMyProgress(userid) {
 			lieMoInfo = [msg.code, msg.data.id];
 		} else {
 			console.log(msg.msg);
+			lieMoInfo = [msg.code, 0];
 		}
+		return lieMoInfo;
 	});
 }
 
@@ -50,15 +52,14 @@ async function getLiemoReward(userid, roomId) {
 
 const sleep = (delay) => new Promise((resolve) => setTimeout(resolve, delay));
 async function* main(userid) {
-		try {
-			lieMoInfo = await getMyProgress(userid);
-			await sleep(4200);
-			if (lieMoInfo[0] == 0) throw ("领取奖励");
-		} catch (error) {
-			yield getLiemoReward("4837a285-bb1a-4f9a-886e-946a3e11597a", lieMoInfo[1]);
-		}
+	lieMoInfo = await getMyProgress(userid);
+	await sleep(4200);
+	if (lieMoInfo[0] == 0) {
+		await getLiemoReward(userid, lieMoInfo[1]);
+	} else if(lieMoInfo[0] == -1) {
+		console.log("无奖励可领取");
 	}
+}
 
-// ID 历练地图名称 x轴位置 y轴位置 使用元气数量
 const task = main("4837a285-bb1a-4f9a-886e-946a3e11597a")
 task.next()
