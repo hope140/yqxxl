@@ -29,3 +29,4 @@ async function makeDrug(userid, drugid, lists, lv, maxrun) {
 	}
 }
 makeDrug("4837a285-bb1a-4f9a-886e-946a3e11597a", "2", "[196390,196390,196393,248615,211901]", 40, 1);
+
