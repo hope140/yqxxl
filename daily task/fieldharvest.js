@@ -53,7 +53,7 @@ async function field(fieldid) {
 
 // 药田收获，填写药田编号
 
-async function* main(userid) {
+async function main(userid) {
 	console.log("***获取药田编号***");
 	fileInfo = await findUserFieldInfo(userid);
 	await sleep(1000);
@@ -67,5 +67,4 @@ async function* main(userid) {
 		await field(fileInfo[4]);
 	}
 }
-const task = main("4837a285-bb1a-4f9a-886e-946a3e11597a")
-task.next()
+main("4837a285-bb1a-4f9a-886e-946a3e11597a")

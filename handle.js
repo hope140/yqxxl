@@ -52,7 +52,6 @@ async function dazuo(userid, mapname, mapx, mapy) {
 		}
 		return userstate;
 	});
-	// task.next("一轮打坐结束");
 }
 // 抗雷函数 参数：用户ID, 抗雷消耗类型
 async function handle(userid, type) {
@@ -80,13 +79,12 @@ async function handle(userid, type) {
 		}
 		return drughp;
 	});
-	task.next("一次抗雷结束");
 }
 
 // 4200毫秒间隔，状态满后自动停止打坐
 
 const sleep = (delay) => new Promise((resolve) => setTimeout(resolve, delay));
-async function* main(userid, mapname, mapx, mapy) {
+async function main(userid, mapname, mapx, mapy) {
 	console.log("***开始抗雷***");
 	for (let count = 0; count < 30; count++) {
 		try {
@@ -116,5 +114,4 @@ async function* main(userid, mapname, mapx, mapy) {
 	}
 }
 // ID 打坐地图名称 x轴位置 y轴位置
-const task = main("4837a285-bb1a-4f9a-886e-946a3e11597a", "殒神林2", 4, 2, 0)
-task.next()
+main("4837a285-bb1a-4f9a-886e-946a3e11597a", "殒神林2", 4, 2, 0)

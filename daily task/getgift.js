@@ -59,7 +59,7 @@ async function getgift(userid, level, levellevel, maxrun) {
 
 const sleep = (delay) => new Promise((resolve) => setTimeout(resolve, delay));
 // 扫荡，level为扫荡的关卡，levellevel为关卡的种类，maxrun为扫荡的次数
-async function* main(userid) {
+async function main(userid) {
 	level = await getGameCopyInfo(userid);
 	await sleep(1000);
 	if (level[0] > 0) {
@@ -85,6 +85,4 @@ async function* main(userid) {
 		}
 	}
 }
-
-const task = main("4837a285-bb1a-4f9a-886e-946a3e11597a")
-task.next()
+main("4837a285-bb1a-4f9a-886e-946a3e11597a")

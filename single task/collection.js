@@ -26,12 +26,11 @@ async function collection(userid, mapname, mapx, mapy, offlinenum) {
 		}
 		// console.log(msg);
 	});
-	task.next("一轮采药结束");
 }
 
 
 const sleep = (delay) => new Promise((resolve) => setTimeout(resolve, delay));
-async function* main(userid, mapname, mapx, mapy, offlinenum) {
+async function main(userid, mapname, mapx, mapy, offlinenum) {
 	for (let count = 0; count < 100; count++) {
 		console.log(`第${count + 1}次采药`);
 		collection(userid, mapname, mapx, mapy, offlinenum);
@@ -39,5 +38,4 @@ async function* main(userid, mapname, mapx, mapy, offlinenum) {
 	}
 }
 // ID 采药地图名称 x轴位置 y轴位置 使用元气数量
-const task = main("4837a285-bb1a-4f9a-886e-946a3e11597a", "殒神林1", 3, 7, 0)
-task.next()
+main("4837a285-bb1a-4f9a-886e-946a3e11597a", "殒神林1", 3, 7, 0)

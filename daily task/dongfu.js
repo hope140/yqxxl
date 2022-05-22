@@ -136,7 +136,6 @@ async function* main(userid) {
 			await buydongfu(userid, 3, 1);
 			await experiencedongfu(userid, 1, 30, 3);
 		}
-
 	}
 	await sleep(1000);
 	await sellUserBagAll(userid, 30, -1, -1, 0);

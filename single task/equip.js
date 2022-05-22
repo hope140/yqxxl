@@ -121,7 +121,7 @@ async function equip(userid, endequipid, carryequipid) {
 	await sleep(500);
 }
 
-async function* main(userid,equipid){
+async function main(userid,equipid){
 	EquipsState = await getAttributesInfo(userid);
 	await sleep(1000);
 	await equip(userid, EquipsState, equipid);
@@ -137,6 +137,6 @@ async function* main(userid,equipid){
 // const task = main("4837a285-bb1a-4f9a-886e-946a3e11597a", [153114, 150948, 146211], [145320, 150948, 132974]);
 
 // 猎魔还原
-const task = main("4837a285-bb1a-4f9a-886e-946a3e11597a", [150948, 153114, 146211]);
-task.next()
+main("4837a285-bb1a-4f9a-886e-946a3e11597a", [150948, 153114, 146211]);
+
 

@@ -27,7 +27,6 @@ async function experience(userid, mapname, mapx, mapy, offlinenum) {
 		}
 		return state;
 	});
-	// task.next("一轮历练结束");
 }
 
 // 打坐函数 参数：用户ID, 打坐地点, 地图x轴位置, 地图y轴位置
@@ -59,12 +58,11 @@ async function dazuo(userid, mapname, mapx, mapy) {
 		}
 		return userstate;
 	});
-	// task.next("一轮打坐结束");
 }
 
 // 主函数，打不过怪会报错
 const sleep = (delay) => new Promise((resolve) => setTimeout(resolve, delay));
-async function* main(userid, mapname, sitmap, mapx, mapy, offlinenum) {
+async function main(userid, mapname, sitmap, mapx, mapy, offlinenum) {
 	for (let count = 0; count < 100; count++) {
 		console.log(`第${count + 1}次历练`);
 		try {
@@ -90,5 +88,4 @@ async function* main(userid, mapname, sitmap, mapx, mapy, offlinenum) {
 }
 
 // ID 历练地图名称 x轴位置 y轴位置 使用元气数量
-const task = main("4837a285-bb1a-4f9a-886e-946a3e11597a", "无极山1", "殒神林2",1, 2, 0)
-task.next()
+main("4837a285-bb1a-4f9a-886e-946a3e11597a", "无极山1", "殒神林2",1, 2, 0)

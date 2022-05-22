@@ -51,15 +51,14 @@ async function getLiemoReward(userid, roomId) {
 }
 
 const sleep = (delay) => new Promise((resolve) => setTimeout(resolve, delay));
-async function* main(userid) {
+async function main(userid) {
 	lieMoInfo = await getMyProgress(userid);
-	await sleep(4200);
+	await sleep(1000);
 	if (lieMoInfo[0] == 0) {
 		await getLiemoReward(userid, lieMoInfo[1]);
 	} else if(lieMoInfo[0] == -1) {
-		console.log("无奖励可领取");
+		console.log("***无奖励可领取***");
 	}
 }
 
-const task = main("4837a285-bb1a-4f9a-886e-946a3e11597a")
-task.next()
+main("4837a285-bb1a-4f9a-886e-946a3e11597a")

@@ -21,7 +21,6 @@ async function carryEquip(userid, userBagEquipId) {
 			console.log(msg.msg);
 		}
 	});
-	task.next("使用成功");
 }
 
 async function endEquip(userid, userBagEquipId) {
@@ -46,7 +45,6 @@ async function endEquip(userid, userBagEquipId) {
 			console.log(msg.msg);
 		}
 	});
-	task.next("卸下成功");
 }
 
 async function lockEquip(userid, userBagEquipId) {
@@ -71,7 +69,6 @@ async function lockEquip(userid, userBagEquipId) {
 			console.log(msg.msg);
 		}
 	});
-	task.next("锁定成功");
 }
 
 async function getMyProgress(userid) {
@@ -181,7 +178,7 @@ async function getAttributesInfo(userid) {
 
 // 先检测状态，然后换装备
 const sleep = (delay) => new Promise((resolve) => setTimeout(resolve, delay));
-async function* main(userid, equipid, roomName, roomPassWord, difficulty, palyerNum) {
+async function main(userid, equipid, roomName, roomPassWord, difficulty, palyerNum) {
 	LieMoInfo = await getMyProgress(userid);
 	await sleep(1000);
 	if (LieMoInfo[0] == 0) {
@@ -199,5 +196,4 @@ async function* main(userid, equipid, roomName, roomPassWord, difficulty, palyer
 	}
 }
 // 猎魔单刷
-const task = main("4837a285-bb1a-4f9a-886e-946a3e11597a", [145320, 150948, 132974], "葱芽" , "", 3, 1);
-task.next()
+main("4837a285-bb1a-4f9a-886e-946a3e11597a", [145320, 150948, 132974], "葱芽" , "", 3, 1);

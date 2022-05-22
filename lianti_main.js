@@ -22,7 +22,6 @@ async function lianti(userid, offlinenum) {
 			state = [msg.code, 0, 0, 0, 0];
 		}
 	});
-	// task.next('炼体结束，开始下一步');
 }
 
 async function dazuo(userid, mapname, mapx, mapy) {
@@ -52,13 +51,12 @@ async function dazuo(userid, mapname, mapx, mapy) {
 		}
 		return userstate;
 	});
-	// task.next("一轮打坐结束");
 }
 
 // 4200毫秒间隔，气血满后自动停止打坐
 
 const sleep = (delay) => new Promise((resolve) => setTimeout(resolve, delay));
-async function* main(userid, mapname, mapx, mapy, offlinenum) {
+async function main(userid, mapname, mapx, mapy, offlinenum) {
 	for (let count = 0; count < 100; count++) {
 		console.log(`第${count + 1}次炼体`);
 		try {
@@ -81,5 +79,4 @@ async function* main(userid, mapname, mapx, mapy, offlinenum) {
 	}
 }
 //  ID 打坐地图名称 x轴位置 y轴位置 使用元气数量
-const task = main("4837a285-bb1a-4f9a-886e-946a3e11597a", "殒神林2", 1, 2, 0)
-task.next()
+main("4837a285-bb1a-4f9a-886e-946a3e11597a", "殒神林2", 1, 2, 0)

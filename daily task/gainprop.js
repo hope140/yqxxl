@@ -21,7 +21,7 @@ async function getGameCopyInfo(userid) {
 
 async function gainprop(userid, gainpropid, maxrun) {
 	for (let count = 0; count < maxrun; count++) {
-		await sleep(4500)
+		await sleep(1000)
 		console.log("使用法宝");
 		var request = require('request');
 		var options = {
@@ -48,8 +48,8 @@ async function gainprop(userid, gainpropid, maxrun) {
 	task.next("法宝进入冷却");
 }
 // 法宝使用，现所有主动法宝，最好配合定时任务使用
-
-async function* main(userid) {
+// 留一个Generator/yield式的异步做例子
+function* main(userid) {
 	yield getGameCopyInfo(userid);
 	yield gainprop(userid, 1, 1);
 	yield gainprop(userid, 2, 1);

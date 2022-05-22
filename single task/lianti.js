@@ -25,7 +25,7 @@ async function lianti(userid, offlinenum) {
 }
 
 const sleep = (delay) => new Promise((resolve) => setTimeout(resolve, delay));
-async function* main(userid, offlinenum) {
+async function main(userid, offlinenum) {
 	for (let count = 0; count < 100; count++) {
 		console.log(`第${count + 1}次炼体`);
 		lianti(userid, offlinenum);
@@ -33,5 +33,4 @@ async function* main(userid, offlinenum) {
 	}
 }
 // ID 使用元气数量
-const task = main("4837a285-bb1a-4f9a-886e-946a3e11597a", 0)
-task.next()
+main("4837a285-bb1a-4f9a-886e-946a3e11597a", 0)

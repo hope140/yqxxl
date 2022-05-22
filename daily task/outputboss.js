@@ -178,7 +178,7 @@ async function getAttributesInfo(userid) {
 }
 
 const sleep = (delay) => new Promise((resolve) => setTimeout(resolve, delay));
-async function* main(userid, HunEquipId) {
+async function main(userid, HunEquipId) {
 	bossinfo = await getGameCopyInfo(userid);
 	await sleep(1000);
 	if (bossinfo[1] > 0) {
@@ -187,12 +187,12 @@ async function* main(userid, HunEquipId) {
 			EquipsState = await getAttributesInfo(userid);
 			await sleep(1000);
 			await equip(userid, EquipsState, HunEquipId);
-			await sleep(1000);
+			await sleep(500);
 			console.log("***讨伐邪魔***");
 			await output(userid, bossinfo[1]);
-			await sleep(1000);
+			await sleep(500);
 			await equip(userid, HunEquipId, EquipsState);
-			await sleep(1000);
+			await sleep(500);
 			console.log("***讨伐结束***");
 		}else if (bossinfo[0] == 2) {
 			console.log(`邪魔特性：${bossinfo[2]}`);
@@ -203,8 +203,7 @@ async function* main(userid, HunEquipId) {
 		console.log("***没有剩余次数，不进行讨伐***");
 	}
 }
-const task = main("4837a285-bb1a-4f9a-886e-946a3e11597a", [132974, 134721, 145529]);
-task.next();
+main("4837a285-bb1a-4f9a-886e-946a3e11597a", [132974, 134721, 145529]);
 
 // 收集boss信息，为自动化做准备
 // "gameCopyBossInto": {
