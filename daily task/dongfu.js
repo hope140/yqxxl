@@ -14,7 +14,7 @@ async function getDongfu(userid) {
 			"mapY": 2
 		})
 	};
-	request(options, function (error, response) {
+	request(options, function (_error, response) {
 		// if (error) throw new Error(error);
 		msg = JSON.parse(response.body);
 		if (msg.code == 0) {
@@ -59,7 +59,7 @@ async function experiencedongfu(userid, type, lv, maxrun) {
 		});
 	}
 }
-async function buydongfu(userid, number, maxrun) {
+async function buydongfu(userid, number) {
 	await sleep(500)
 	console.log("购买次数");
 	var request = require('request');
@@ -87,7 +87,35 @@ async function buydongfu(userid, number, maxrun) {
 	});
 }
 
-// 洞府副本，获取物品json还有问题，有时候会返回两个，不过优先级不高，暂不处理
+async function sellUserBagAll(userid, lv, quality, type, lvGrowthValue) {
+	await sleep(500)
+	console.log("***一键售卖无用法器***");
+	var request = require('request');
+	var options = {
+		'method': 'POST',
+		'url': 'https://yqxxl.yqbros.com/Yqxxl/Bag/sellUserBagAll',
+		'headers': {
+			'Content-Type': 'application/json'
+		},
+		body: JSON.stringify({
+			"userId": userid,
+			"lv": lv,
+			"quality": quality,
+			"type": type,
+			"lvGrowthValue": lvGrowthValue
+		})
+	};
+	request(options, function (error, response) {
+		if (error) throw new Error(error);
+		msg = JSON.parse(response.body);
+		if (msg.code == 0) {
+			console.log(msg.data.msg)
+		} else {
+			console.log(msg.msg);
+		}
+	});
+}
+
 async function* main(userid) {
 	console.log("***刷新副本次数***");
 	dongfuInfo = await getDongfu(userid);
@@ -109,6 +137,8 @@ async function* main(userid) {
 			await experiencedongfu(userid, 1, 30, 3);
 		}
 	}
+	await sleep(1000);
+	await sellUserBagAll(userid, 30, -1, -1, 0);
 }
 const task = main("4837a285-bb1a-4f9a-886e-946a3e11597a")
 task.next()

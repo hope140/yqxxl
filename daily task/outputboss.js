@@ -64,6 +64,7 @@ async function* main(userid) {
 const task = main("4837a285-bb1a-4f9a-886e-946a3e11597a");
 task.next();
 
+// 收集boss信息，为自动化做准备
 // "gameCopyBossInto": {
 // 	"id": 1,
 // 	"lastHp": 19192538,
