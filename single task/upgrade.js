@@ -72,8 +72,8 @@ async function upgrade(userid, type) {
 }
 async function* main() {
 	for (let count = 0; count < 60; count++) {
-		yield upgrade(21487, 2);
-		yield dazuo(21487, "琳琅境1", 3, 12, 100);
+		yield upgrade("4837a285-bb1a-4f9a-886e-946a3e11597a", 2);
+		yield dazuo("4837a285-bb1a-4f9a-886e-946a3e11597a", "殒神林2", 1, 2, 100);
 	}
 }
 const task = main()

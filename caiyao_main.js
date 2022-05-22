@@ -73,13 +73,13 @@ async function* main(userid, mapname, sitmap, mapx, mapy, offlinenum, lv) {
 			if (userhunMp[0] == 0 && userhunMp[1] < lv * 10) throw ("魂力不足");
 			if (userhunMp[0] == -1) throw ("采药失败，魂力不足");
 		} catch (Error) {
-			console.log(Error + " 开始打坐");
+			console.log("***" + Error + " 开始打坐***");
 			for (let count = 0; count < 30; count++) {
 				console.log("第" + (count + 1) + "次打坐");
-				hunMp = await dazuo(userid, mapname, mapx, mapy);
+				hunMp = await dazuo(userid, sitmap, mapx, mapy);
 				await sleep(4200);
 				if (hunMp[0] == 0 && hunMp[1] === hunMp[2]) {
-					console.log("魂力已满，结束");
+					console.log("***魂力已满，结束***");
 					break;
 				}
 			}
@@ -87,5 +87,5 @@ async function* main(userid, mapname, sitmap, mapx, mapy, offlinenum, lv) {
 	}
 }
 // ID 采药地图名称 打坐地图名称 x轴位置 y轴位置 使用元气数量 当前魂等级
-const task = main(21487, "焚灯谷2", "琳琅境1", 3, 12, 0, 5)
+const task = main("4837a285-bb1a-4f9a-886e-946a3e11597a", "殒神林1", "殒神林2", 1, 2, 0, 5)
 task.next()

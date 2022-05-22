@@ -39,11 +39,11 @@ async function* sit(userid, mapname, mapx, mapy) {
 		userstate = await dazuo(userid, mapname, mapx, mapy);
 		await sleep(4200);
 		if (userstate[0] == 0 && userstate[1] === userstate[2] && userstate[3] === userstate[4] && userstate[5] === userstate[6]) {
-			console.log("状态已满，结束");
+			console.log("***状态已满，结束***");
 			break;
 		}
 	}
 }
 // ID 打坐地图名称 x轴位置 y轴位置
-const task = sit(21487, "琳琅境1", 3, 12)
+const task = sit("4837a285-bb1a-4f9a-886e-946a3e11597a", "殒神林2", 4, 2, 0)
 task.next()
