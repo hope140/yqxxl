@@ -76,7 +76,6 @@ async function carryEquip(userid, userBagEquipId) {
 			console.log(msg.msg);
 		}
 	});
-	task.next("使用成功");
 }
 
 async function endEquip(userid, userBagEquipId) {
@@ -101,7 +100,6 @@ async function endEquip(userid, userBagEquipId) {
 			console.log(msg.msg);
 		}
 	});
-	task.next("卸下成功");
 }
 
 async function lockEquip(userid, userBagEquipId) {
@@ -126,7 +124,6 @@ async function lockEquip(userid, userBagEquipId) {
 			console.log(msg.msg);
 		}
 	});
-	task.next("锁定成功");
 }
 async function equip(userid, endequipid, carryequipid) {
 	console.log("***卸装备***");
@@ -177,25 +174,30 @@ async function getAttributesInfo(userid) {
 	});
 }
 
+async function attack(userid, EquipId, frequency) {
+	EquipsState = await getAttributesInfo(userid);
+	await sleep(1000);
+	await equip(userid, EquipsState, EquipId);
+	await sleep(500);
+	console.log("***讨伐邪魔***");
+	await output(userid, frequency);
+	await sleep(500);
+	await equip(userid, EquipId, EquipsState);
+	await sleep(500);
+	console.log("***讨伐结束***");
+}
+
 const sleep = (delay) => new Promise((resolve) => setTimeout(resolve, delay));
-async function main(userid, HunEquipId) {
+async function main(userid, HunEquipId, LinEquipId) {
 	bossinfo = await getGameCopyInfo(userid);
 	await sleep(1000);
 	if (bossinfo[1] > 0) {
 		if (bossinfo[0] == 1) {
 			console.log(`邪魔特性：${bossinfo[2]}`);
-			EquipsState = await getAttributesInfo(userid);
-			await sleep(1000);
-			await equip(userid, EquipsState, HunEquipId);
-			await sleep(500);
-			console.log("***讨伐邪魔***");
-			await output(userid, bossinfo[1]);
-			await sleep(500);
-			await equip(userid, HunEquipId, EquipsState);
-			await sleep(500);
-			console.log("***讨伐结束***");
+			await attack(userid, HunEquipId, bossinfo[1]);
 		}else if (bossinfo[0] == 2) {
 			console.log(`邪魔特性：${bossinfo[2]}`);
+			await attack(userid, LinEquipId, bossinfo[1]);
 		}else{
 			console.log(`邪魔特性：${bossinfo[2]}`);
 		}
@@ -203,7 +205,7 @@ async function main(userid, HunEquipId) {
 		console.log("***没有剩余次数，不进行讨伐***");
 	}
 }
-main("4837a285-bb1a-4f9a-886e-946a3e11597a", [132974, 134721, 145529]);
+main("4837a285-bb1a-4f9a-886e-946a3e11597a", [132974, 134721, 145529], [150948,153114,155025]);
 
 // 收集boss信息，为自动化做准备
 // "gameCopyBossInto": {
@@ -214,4 +216,14 @@ main("4837a285-bb1a-4f9a-886e-946a3e11597a", [132974, 134721, 145529]);
 // 	"state": 1,
 // 	"value": "武灵无效，魂四倍伤害",
 // 	"weekDieNum": 11
+// }
+
+// "gameCopyBossInto": {
+// 	"id": 2,
+// 	"lastHp": 6949867,
+// 	"name": "魂天邪帝",
+// 	"nowHp": 645179,
+// 	"state": 1,
+// 	"value": "魂无效，武灵两倍伤害",
+// 	"weekDieNum": 0
 // }

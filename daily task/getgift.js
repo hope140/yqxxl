@@ -54,7 +54,6 @@ async function getgift(userid, level, levellevel, maxrun) {
 			}
 		});
 	}
-	task.next('扫荡结束，开始下一步');
 }
 
 const sleep = (delay) => new Promise((resolve) => setTimeout(resolve, delay));

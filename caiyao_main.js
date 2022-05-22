@@ -26,7 +26,6 @@ async function collection(userid, mapname, mapx, mapy, offlinenum) {
 		}
 		return userhunMp;
 	});
-	// task.next("一轮采药结束");
 }
 
 // 打坐函数 参数：用户ID, 打坐地点, 地图x轴位置, 地图y轴位置
@@ -58,7 +57,6 @@ async function dazuo(userid, mapname, mapx, mapy) {
 		}
 		return hunMp;
 	});
-	// task.next("一轮打坐结束");
 }
 
 // 4200毫秒间隔，气血满后自动停止打坐
