@@ -17,12 +17,12 @@ async function getGameCopyInfo(userid) {
 		msg = JSON.parse(response.body);
 		if (msg.code == 0) {
 			console.log(`讨伐邪魔剩余次数${msg.data.userGameCopyInfo.level3Num}`);
-			maxrun = msg.data.userGameCopyInfo.level3Num;
+			bossinfo = [msg.data.gameCopyBossInto.id, msg.data.userGameCopyInfo.level3Num, msg.data.gameCopyBossInto.value];
 		} else {
 			console.log(msg.msg);
-			maxrun = 0;
+			bossinfo = [0, 0, ""];
 		}
-		return maxrun;
+		return bossinfo;
 	});
 }
 
@@ -53,12 +53,122 @@ async function output(userid, maxrun) {
 	}
 }
 
+// 一键换装
+async function carryEquip(userid, userBagEquipId) {
+	var request = require('request');
+	var options = {
+		'method': 'POST',
+		'url': 'https://yqxxl.yqbros.com/Yqxxl/Bag/carryEquip',
+		'headers': {
+			'Content-Type': 'application/json'
+		},
+		body: JSON.stringify({
+			"userId": userid,
+			"userBagEquipId": userBagEquipId
+		})
+	};
+	request(options, function (error, response) {
+		if (error) throw new Error(error);
+		msg = JSON.parse(response.body);
+		if (msg.code == 0) {
+			console.log(userBagEquipId + msg.data);
+		} else {
+			console.log(msg.msg);
+		}
+	});
+	task.next("使用成功");
+}
+
+async function endEquip(userid, userBagEquipId) {
+	var request = require('request');
+	var options = {
+		'method': 'POST',
+		'url': 'https://yqxxl.yqbros.com/Yqxxl/Bag/endEquip',
+		'headers': {
+			'Content-Type': 'application/json'
+		},
+		body: JSON.stringify({
+			"userId": userid,
+			"userBagEquipId": userBagEquipId
+		})
+	};
+	request(options, function (error, response) {
+		if (error) throw new Error(error);
+		msg = JSON.parse(response.body);
+		if (msg.code == 0) {
+			console.log(userBagEquipId + msg.data);
+		} else {
+			console.log(msg.msg);
+		}
+	});
+	task.next("卸下成功");
+}
+
+async function lockEquip(userid, userBagEquipId) {
+	var request = require('request');
+	var options = {
+		'method': 'POST',
+		'url': 'https://yqxxl.yqbros.com/Yqxxl/Bag/lockEquip',
+		'headers': {
+			'Content-Type': 'application/json'
+		},
+		body: JSON.stringify({
+			"userId": userid,
+			"userBagEquipId": userBagEquipId
+		})
+	};
+	request(options, function (error, response) {
+		if (error) throw new Error(error);
+		msg = JSON.parse(response.body);
+		if (msg.code == 0) {
+			console.log(userBagEquipId + msg.data);
+		} else {
+			console.log(msg.msg);
+		}
+	});
+	task.next("锁定成功");
+}
+async function equip(userid, endequipid, carryequipid) {
+	console.log("***卸装备***");
+	for (let i = 0; i < 3; i++) {
+		await endEquip(userid, endequipid[i]);
+		await sleep(200);
+	}
+	await sleep(200);
+	console.log("***穿装备***");
+	for (let i = 0; i < 3; i++) {
+		await carryEquip(userid, carryequipid[i]);
+		await sleep(200);
+	}
+	await sleep(200);
+	console.log("***锁装备***");
+	for (let i = 0; i < 3; i++) {
+		await lockEquip(userid, endequipid[i]);
+		await sleep(200);
+	}
+	await sleep(200);
+}
+
 const sleep = (delay) => new Promise((resolve) => setTimeout(resolve, delay));
 async function* main(userid) {
-	maxrun = await getGameCopyInfo(userid);
+	bossinfo = await getGameCopyInfo(userid);
 	await sleep(1000);
-	if (maxrun > 0) {
-		await output(userid, maxrun);
+	if (bossinfo[1] > 0) {
+		if (bossinfo[0] == 1) {
+			console.log(`邪魔特性：${bossinfo[2]}`);
+			await equip("4837a285-bb1a-4f9a-886e-946a3e11597a", [153114, 150948, 146211], [132974, 134721, 145529]);
+			await sleep(1000);
+			console.log("***讨伐邪魔***");
+			await output(userid, bossinfo[1]);
+			await sleep(1000);
+			await equip("4837a285-bb1a-4f9a-886e-946a3e11597a", [132974, 134721, 145529], [153114, 150948, 146211]);
+		}else if (bossinfo[0] == 2) {
+			console.log(`邪魔特性：${bossinfo[2]}`);
+		}else{
+			console.log(`邪魔特性：${bossinfo[2]}`);
+		}
+	}else{
+		console.log("***没有剩余次数，不进行讨伐***");
 	}
 }
 const task = main("4837a285-bb1a-4f9a-886e-946a3e11597a");

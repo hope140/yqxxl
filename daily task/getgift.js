@@ -74,6 +74,7 @@ async function* main(userid) {
 			await getgift(userid, 1, 3, level[0]);
 		}
 	}
+	await sleep(500);
 	if (level[5] > 0) {
 		if (level[6] == level[8]) {
 			console.log("***开始扫荡残魂-诛***");
