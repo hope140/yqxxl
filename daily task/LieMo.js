@@ -88,13 +88,40 @@ async function getMyProgress(userid) {
 		if (error) throw new Error(error);
 		msg = JSON.parse(response.body);
 		if (msg.code == 0) {
-			console.log(msg.data.playerNum + "人队伍" + "，名称：" + msg.data.lieMoRoomInfo.roomName + "，难度：" + msg.data.lieMoRoomInfo.difficulty);
+			console.log(`${msg.data.playerNum}人队伍，名称：${msg.data.lieMoRoomInfo.roomName}，难度：${msg.data.lieMoRoomInfo.difficulty}`);
 			LieMoInfo = [msg.code, msg.data.lieMoRoomInfo.roomId];
 		} else {
 			console.log(msg.msg);
 			LieMoInfo = [msg.code, 0];
 		}
 		return LieMoInfo;
+	});
+}
+
+async function getUserLieMoInfo(userid) {
+	console.log("***剩余猎魔次数***");
+	var request = require('request');
+	var options = {
+		'method': 'POST',
+		'url': 'https://yqxxl.yqbros.com/Yqxxl/LieMo/getUserLieMoInfo',
+		'headers': {
+			'Content-Type': 'application/json'
+		},
+		body: JSON.stringify({
+			"userId": userid
+		})
+	};
+	request(options, function (error, response) {
+		if (error) throw new Error(error);
+		msg = JSON.parse(response.body);
+		if (msg.code == 0) {
+			console.log(`剩余创建次数：${msg.data.userLieMoInfo.creatNum}，剩余加入次数${msg.data.userLieMoInfo.joinNum}，剩余奖励次数${msg.data.userLieMoInfo.rewardNum}`);
+			LieMoNum = [msg.data.userLieMoInfo.creatNum, msg.data.userLieMoInfo.joinNum, msg.data.userLieMoInfo.rewardNum];
+		} else {
+			console.log(msg.msg);
+			LieMoNum = [0, 0, 0];
+		}
+		return LieMoNum;
 	});
 }
 
@@ -181,9 +208,11 @@ const sleep = (delay) => new Promise((resolve) => setTimeout(resolve, delay));
 async function main(userid, equipid, roomName, roomPassWord, difficulty, palyerNum) {
 	LieMoInfo = await getMyProgress(userid);
 	await sleep(1000);
+	LieMoNum = await getUserLieMoInfo(userid);
+	await sleep(1000);
 	if (LieMoInfo[0] == 0) {
 		console.log("***继续当前猎魔***");
-	}else if (LieMoInfo[0] == -1) {
+	}else if (LieMoInfo[0] == -1 && LieMoNum[0] > 0) {
 		console.log("***开始猎魔***");
 		EquipsState = await getAttributesInfo(userid);
 		await sleep(1000);
@@ -193,6 +222,8 @@ async function main(userid, equipid, roomName, roomPassWord, difficulty, palyerN
 		await sleep(500);
 		await equip(userid, equipid, EquipsState);
 		await sleep(500);
+	}else{
+		console.log("***无创建次数***");
 	}
 }
 // 猎魔单刷
