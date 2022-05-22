@@ -16,7 +16,7 @@ async function getGameCopyInfo(userid) {
 		// if (error) throw new Error(error);
 		msg = JSON.parse(response.body);
 		if (msg.code == 0) {
-			console.log("讨伐邪魔剩余次数" + msg.data.userGameCopyInfo.level3Num);
+			console.log(`讨伐邪魔剩余次数${msg.data.userGameCopyInfo.level3Num}`);
 			maxrun = msg.data.userGameCopyInfo.level3Num;
 		} else {
 			console.log(msg.msg);
@@ -29,7 +29,7 @@ async function getGameCopyInfo(userid) {
 async function output(userid, maxrun) {
 	for (let count = 0; count < maxrun; count++) {
 		await sleep(1000)
-		console.log("第" + (count + 1) + "次讨伐");
+		console.log(`第${count + 1}次讨伐`);
 		var request = require('request');
 		var options = {
 			'method': 'POST',

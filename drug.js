@@ -17,7 +17,7 @@ async function makeDrug(userid, drugid, lists, lv) {
 		if (error) throw new Error(error);
 		msg = JSON.parse(response.body);
 		if (msg.code == 0) {
-			console.log(msg.data.msg + " 丹雷状态" + msg.data.userMakeDrug.danleiHp + "/" + msg.data.userMakeDrug.danleiHpMax);
+			console.log(`${msg.data.msg} 丹雷状态${msg.data.userMakeDrug.danleiHp}/${msg.data.userMakeDrug.danleiHpMax}`);
 			drugstate = [msg.code, msg.data.userMakeDrug.danleiHp, msg.data.userMakeDrug.danleiHpMax];
 		} else {
 			console.log(msg.msg);
@@ -73,7 +73,7 @@ async function dazuo(userid, mapname, mapx, mapy) {
 		if (error) throw new Error(error);
 		msg = JSON.parse(response.body);
 		if (msg.code == 0) {
-			console.log("气血:" + msg.data.userStateInfo.hp + "/" + msg.data.userStateInfo.hpMax + " 灵：" + msg.data.userStateInfo.linMp + "/" + msg.data.userStateInfo.linMpMax + " 魂：" + msg.data.userStateInfo.hunMp + "/" + msg.data.userStateInfo.hunMpMax);
+			console.log(`气血:${msg.data.userStateInfo.hp}/${msg.data.userStateInfo.hpMax} 灵：${msg.data.userStateInfo.linMp}/${msg.data.userStateInfo.linMpMax} 魂：${msg.data.userStateInfo.hunMp}/${msg.data.userStateInfo.hunMpMax}`);
 			userstate = [msg.code, msg.data.userStateInfo.hp, msg.data.userStateInfo.hpMax, msg.data.userStateInfo.linMp, msg.data.userStateInfo.linMpMax, msg.data.userStateInfo.hunMp, msg.data.userStateInfo.hunMpMax];
 		} else {
 			console.log(msg.msg);
@@ -121,7 +121,7 @@ async function* main(userid, drugid, lists, lv, mapname, mapx, mapy) {
 		await sleep(1000);
 		if (drugstate[0] == 0 && drugstate[1] > 0) throw ("丹雷出现");
 	} catch (error) {
-		console.log("***" + error + "，开始抗雷***");
+		console.log(`***${error}，开始抗雷***`);
 		for (let count = 0; count < 30; count++) {
 			try {
 				drughp = await handle(userid, 1);
@@ -133,7 +133,7 @@ async function* main(userid, drugid, lists, lv, mapname, mapx, mapy) {
 				if (drughp[0] == 0 && drughp[1] < 0) break;
 				if (drughp[0] == -1 && drughp[3] == "异常信息") break;
 			} catch (error) {
-				console.log("***" + error + "，打坐***");
+				console.log(`***${error}，打坐***`);
 				userstate = await dazuo(userid, mapname, mapx, mapy);
 				await sleep(4200);
 			}
@@ -141,7 +141,7 @@ async function* main(userid, drugid, lists, lv, mapname, mapx, mapy) {
 	} finally {
 		console.log("***最后一轮打坐***");
 		for (let count = 0; count < 30; count++) {
-			console.log("第" + (count + 1) + "次打坐");
+			console.log(`第${count + 1}次打坐`);
 			userstate = await dazuo(userid, mapname, mapx, mapy);
 			await sleep(4200);
 			if (userstate[0] == 0 && userstate[1] === userstate[2] && userstate[3] === userstate[4] && userstate[5] === userstate[6]) {

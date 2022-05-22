@@ -78,7 +78,7 @@ async function buydongfu(userid, number) {
 		if (error) throw new Error(error);
 		msg = JSON.parse(response.body);
 		if (msg.code == 0) {
-			console.log("次数:" + msg.data.userDongfuInfo.number + "/" + msg.data.userDongfuInfo.maxNumber);
+			console.log(`次数:${msg.data.userDongfuInfo.number}/${msg.data.userDongfuInfo.maxNumber}`);
 		} else if (msg.code == -1) {
 			console.log("购买次数不足");
 		} else {

@@ -123,8 +123,7 @@ async function createLieMoRoom(userid, roomName, roomPassWord, difficulty, palye
 		if (error) throw new Error(error);
 		msg = JSON.parse(response.body);
 		if (msg.code == 0) {
-			// console.log(`${msg.data.playerNum}人队伍，名称：${msg.data.lieMoRoomInfo.roomName}，难度：${msg.data.lieMoRoomInfo.difficulty}`);
-			console.log(msg);
+			console.log(msg.data.msg);
 		} else {
 			console.log("创建失败，" + msg.msg);
 		}
@@ -170,5 +169,5 @@ async function* main(userid, endequipid, carryequipid, roomName, roomPassWord, d
 	}
 }
 // 猎魔单刷
-const task = main("4837a285-bb1a-4f9a-886e-946a3e11597a", [153114, 150948, 146211], [145320, 150948, 132974], "葱芽" , "", 1, 1);
+const task = main("4837a285-bb1a-4f9a-886e-946a3e11597a", [153114, 150948, 146211], [145320, 150948, 132974], "葱芽" , "", 3, 1);
 task.next()

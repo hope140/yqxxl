@@ -18,7 +18,7 @@ async function collection(userid, mapname, mapx, mapy, offlinenum) {
 		if (error) throw new Error(error);
 		msg = JSON.parse(response.body);
 		if (msg.code == 0) {
-			console.log("获得材料:" + msg.data.propInfo.name, "状态：" + "魂值" + msg.data.userStateInfo.hunMp + "/" + msg.data.userStateInfo.hunMpMax);
+			console.log(`获得材料:${msg.data.propInfo.name}`, `状态：魂值${msg.data.userStateInfo.hunMp}/${msg.data.userStateInfo.hunMpMax}`);
 			userhunMp = [msg.code, msg.data.userStateInfo.hunMp, msg.data.userStateInfo.hunMpMax];
 		} else {
 			console.log(msg.msg);
@@ -50,7 +50,7 @@ async function dazuo(userid, mapname, mapx, mapy) {
 		if (error) throw new Error(error);
 		msg = JSON.parse(response.body);
 		if (msg.code == 0) {
-			console.log("气血:" + msg.data.userStateInfo.hp + "/" + msg.data.userStateInfo.hpMax + " 灵：" + msg.data.userStateInfo.linMp + "/" + msg.data.userStateInfo.linMpMax + " 魂：" + msg.data.userStateInfo.hunMp + "/" + msg.data.userStateInfo.hunMpMax);
+			console.log(`气血:${msg.data.userStateInfo.hp}/${msg.data.userStateInfo.hpMax} 灵：${msg.data.userStateInfo.linMp}/${msg.data.userStateInfo.linMpMax} 魂：${msg.data.userStateInfo.hunMp}/${msg.data.userStateInfo.hunMpMax}`);
 			hunMp = [msg.code, msg.data.userStateInfo.hunMp, msg.data.userStateInfo.hunMpMax];
 		} else {
 			console.log(msg.msg);
@@ -66,16 +66,16 @@ async function dazuo(userid, mapname, mapx, mapy) {
 const sleep = (delay) => new Promise((resolve) => setTimeout(resolve, delay));
 async function* main(userid, mapname, sitmap, mapx, mapy, offlinenum, lv) {
 	for (let count = 0; count < 100; count++) {
-		console.log("第" + (count + 1) + "次采药");
+		console.log(`第${count + 1}次采药`);
 		try {
 			userhunMp = await collection(userid, mapname, mapx, mapy, offlinenum);
 			await sleep(4200);
 			if (userhunMp[0] == 0 && userhunMp[1] < lv * 10) throw ("魂力不足");
 			if (userhunMp[0] == -1) throw ("采药失败，魂力不足");
 		} catch (Error) {
-			console.log("***" + Error + " 开始打坐***");
+			console.log(`***${Error} 开始打坐***`);
 			for (let count = 0; count < 30; count++) {
-				console.log("第" + (count + 1) + "次打坐");
+				console.log(`第${count + 1}次打坐`);
 				hunMp = await dazuo(userid, sitmap, mapx, mapy);
 				await sleep(4200);
 				if (hunMp[0] == 0 && hunMp[1] === hunMp[2]) {

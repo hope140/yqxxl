@@ -21,7 +21,7 @@ async function dazuo(userid, mapname, mapx, mapy, maxrun) {
 			// if (error) throw new Error(error);
 			msg = JSON.parse(response.body);
 			if (msg.code == 0) {
-				console.log("气血:" + msg.data.userStateInfo.hp + "/" + msg.data.userStateInfo.hpMax + " 灵：" + msg.data.userStateInfo.linMp + "/" + msg.data.userStateInfo.linMpMax + " 魂：" + msg.data.userStateInfo.hunMp + "/" + msg.data.userStateInfo.hunMpMax);
+				console.log(`气血:${msg.data.userStateInfo.hp}/${msg.data.userStateInfo.hpMax} 灵：${msg.data.userStateInfo.linMp}/${msg.data.userStateInfo.linMpMax} 魂：${msg.data.userStateInfo.hunMp}/${msg.data.userStateInfo.hunMpMax}`);
 				userState = msg.data.userStateInfo;
 			} else if (msg.code == -3) {
 				console.log(msg.msg);
@@ -63,7 +63,7 @@ async function upgrade(userid, type) {
 		// if (error) throw new Error(error);
 		msg = JSON.parse(response.body);
 		if (msg.code == 0) {
-			console.log(msg.data.msg + " 等级：" + msg.data.userLv.wuLv + "级武者" + msg.data.userLv.linLv + "级灵者" + msg.data.userLv.hunLv + "级炼药师");
+			console.log(`${msg.data.msg} 等级：${msg.data.userLv.wuLv}级武者${msg.data.userLv.linLv}级灵者${msg.data.userLv.hunLv}级炼药师`);
 		} else {
 			console.log(msg.msg);
 		}

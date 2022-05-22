@@ -19,7 +19,7 @@ async function dazuo(userid, mapname, mapx, mapy) {
 		if (error) throw new Error(error);
 		msg = JSON.parse(response.body);
 		if (msg.code == 0) {
-			console.log("气血:" + msg.data.userStateInfo.hp + "/" + msg.data.userStateInfo.hpMax + " 灵：" + msg.data.userStateInfo.linMp + "/" + msg.data.userStateInfo.linMpMax + " 魂：" + msg.data.userStateInfo.hunMp + "/" + msg.data.userStateInfo.hunMpMax);
+			console.log(`气血:${msg.data.userStateInfo.hp}/${msg.data.userStateInfo.hpMax} 灵：${msg.data.userStateInfo.linMp}/${msg.data.userStateInfo.linMpMax} 魂：${msg.data.userStateInfo.hunMp}/${msg.data.userStateInfo.hunMpMax}`);
 			userstate = [msg.code, msg.data.userStateInfo.hp, msg.data.userStateInfo.hpMax, msg.data.userStateInfo.linMp, msg.data.userStateInfo.linMpMax, msg.data.userStateInfo.hunMp, msg.data.userStateInfo.hunMpMax];
 		} else {
 			console.log(msg.msg);
@@ -35,7 +35,7 @@ async function dazuo(userid, mapname, mapx, mapy) {
 const sleep = (delay) => new Promise((resolve) => setTimeout(resolve, delay));
 async function* sit(userid, mapname, mapx, mapy) {
 	for (let count = 0; count < 30; count++) {
-		console.log("第" + (count + 1) + "次打坐");
+		console.log(`第${count + 1}次打坐`);
 		userstate = await dazuo(userid, mapname, mapx, mapy);
 		await sleep(4200);
 		if (userstate[0] == 0 && userstate[1] === userstate[2] && userstate[3] === userstate[4] && userstate[5] === userstate[6]) {

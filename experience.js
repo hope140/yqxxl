@@ -19,7 +19,7 @@ async function experience(userid, mapname, mapx, mapy, offlinenum) {
 		if (error) throw new Error(error);
 		msg = JSON.parse(response.body);
 		if (msg.code == 0) {
-			console.log("获得材料:" + msg.data.propInfo.name, "状态：灵值" + msg.data.userLv.linExp, "武值" + msg.data.userLv.wuExp, "魂值" + msg.data.userLv.hunExp);
+			console.log(`获得材料:${msg.data.propInfo.name}`, `状态：灵值${msg.data.userLv.linExp}`, `武值${msg.data.userLv.wuExp}`, `魂值${msg.data.userLv.hunExp}`);
 			state = [msg.code, msg.data.userStateInfo.hp, msg.data.userStateInfo.hpMax, msg.data.userStateInfo.linMp, msg.data.userStateInfo.linMpMax, msg.data.userStateInfo.hunMp, msg.data.userStateInfo.hunMpMax];
 		} else {
 			console.log(msg.msg);
@@ -51,7 +51,7 @@ async function dazuo(userid, mapname, mapx, mapy) {
 		if (error) throw new Error(error);
 		msg = JSON.parse(response.body);
 		if (msg.code == 0) {
-			console.log("气血:" + msg.data.userStateInfo.hp + "/" + msg.data.userStateInfo.hpMax + " 灵：" + msg.data.userStateInfo.linMp + "/" + msg.data.userStateInfo.linMpMax + " 魂：" + msg.data.userStateInfo.hunMp + "/" + msg.data.userStateInfo.hunMpMax);
+			console.log(`气血:${msg.data.userStateInfo.hp}/${msg.data.userStateInfo.hpMax} 灵：${msg.data.userStateInfo.linMp}/${msg.data.userStateInfo.linMpMax} 魂：${msg.data.userStateInfo.hunMp}/${msg.data.userStateInfo.hunMpMax}`);
 			userstate = [msg.code, msg.data.userStateInfo.hp, msg.data.userStateInfo.hpMax, msg.data.userStateInfo.linMp, msg.data.userStateInfo.linMpMax, msg.data.userStateInfo.hunMp, msg.data.userStateInfo.hunMpMax];
 		} else {
 			console.log(msg.msg);
@@ -66,7 +66,7 @@ async function dazuo(userid, mapname, mapx, mapy) {
 const sleep = (delay) => new Promise((resolve) => setTimeout(resolve, delay));
 async function* main(userid, mapname, sitmap, mapx, mapy, offlinenum) {
 	for (let count = 0; count < 100; count++) {
-		console.log("第" + (count + 1) + "次历练");
+		console.log(`第${count + 1}次历练`);
 		try {
 			state = await experience(userid, mapname, mapx, mapy, offlinenum);
 			await sleep(4200);
@@ -75,9 +75,9 @@ async function* main(userid, mapname, sitmap, mapx, mapy, offlinenum) {
 			if (state[0] == 0 && state[5] < state[6] / 10 ) throw ("魂力不足");
 			if (state[0] == -2) throw ("身体被掏空");
 		} catch (error) {
-			console.log("***" + error + "，开始打坐***");
+			console.log(`***${error}，开始打坐***`);
 			for (let count = 0; count < 25; count++) {
-				console.log("第" + (count + 1) + "次打坐");
+				console.log(`第${count + 1}次打坐`);
 				userstate = await dazuo(userid, sitmap, mapx, mapy);
 				await sleep(4200);
 				if (userstate[0] == 0 && userstate[1] === userstate[2] && userstate[3] === userstate[4] && userstate[5] === userstate[6]) {
