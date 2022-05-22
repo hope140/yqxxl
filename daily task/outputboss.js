@@ -149,19 +149,51 @@ async function equip(userid, endequipid, carryequipid) {
 	await sleep(200);
 }
 
+async function getAttributesInfo(userid) {
+	console.log("***获取当前角色状态***");
+	await sleep(100)
+	var request = require('request');
+	var options = {
+		'method': 'POST',
+		'url': 'https://yqxxl.yqbros.com/Yqxxl/User/getAttributesInfo',
+		'headers': {
+			'Content-Type': 'application/json'
+		},
+		body: JSON.stringify({
+			"userId": userid
+		})
+	};
+	request(options, function (error, response) {
+		// if (error) throw new Error(error);
+		msg = JSON.parse(response.body);
+		if (msg.code == 0) {
+			console.log(`角色当前装备${msg.data.userBagEquipsState[0].id},${msg.data.userBagEquipsState[1].id},${msg.data.userBagEquipsState[2].id}`);
+			EquipsState = [msg.data.userBagEquipsState[0].id, msg.data.userBagEquipsState[1].id, msg.data.userBagEquipsState[2].id];
+		} else {
+			console.log(msg.msg);
+			EquipsState = [0, 0, 0];
+		}
+		return EquipsState;
+	});
+}
+
 const sleep = (delay) => new Promise((resolve) => setTimeout(resolve, delay));
-async function* main(userid) {
+async function* main(userid, HunEquipId) {
 	bossinfo = await getGameCopyInfo(userid);
 	await sleep(1000);
 	if (bossinfo[1] > 0) {
 		if (bossinfo[0] == 1) {
 			console.log(`邪魔特性：${bossinfo[2]}`);
-			await equip("4837a285-bb1a-4f9a-886e-946a3e11597a", [153114, 150948, 146211], [132974, 134721, 145529]);
+			EquipsState = await getAttributesInfo(userid);
+			await sleep(1000);
+			await equip(userid, EquipsState, HunEquipId);
 			await sleep(1000);
 			console.log("***讨伐邪魔***");
 			await output(userid, bossinfo[1]);
 			await sleep(1000);
-			await equip("4837a285-bb1a-4f9a-886e-946a3e11597a", [132974, 134721, 145529], [153114, 150948, 146211]);
+			await equip(userid, HunEquipId, EquipsState);
+			await sleep(1000);
+			console.log("***讨伐结束***");
 		}else if (bossinfo[0] == 2) {
 			console.log(`邪魔特性：${bossinfo[2]}`);
 		}else{
@@ -171,7 +203,7 @@ async function* main(userid) {
 		console.log("***没有剩余次数，不进行讨伐***");
 	}
 }
-const task = main("4837a285-bb1a-4f9a-886e-946a3e11597a");
+const task = main("4837a285-bb1a-4f9a-886e-946a3e11597a", [132974, 134721, 145529]);
 task.next();
 
 // 收集boss信息，为自动化做准备

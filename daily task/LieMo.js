@@ -151,23 +151,53 @@ async function equip(userid, endequipid, carryequipid) {
 	await sleep(200);
 }
 
+async function getAttributesInfo(userid) {
+	console.log("***获取当前角色状态***");
+	await sleep(100)
+	var request = require('request');
+	var options = {
+		'method': 'POST',
+		'url': 'https://yqxxl.yqbros.com/Yqxxl/User/getAttributesInfo',
+		'headers': {
+			'Content-Type': 'application/json'
+		},
+		body: JSON.stringify({
+			"userId": userid
+		})
+	};
+	request(options, function (error, response) {
+		// if (error) throw new Error(error);
+		msg = JSON.parse(response.body);
+		if (msg.code == 0) {
+			console.log(`角色当前装备${msg.data.userBagEquipsState[0].id},${msg.data.userBagEquipsState[1].id},${msg.data.userBagEquipsState[2].id}`);
+			EquipsState = [msg.data.userBagEquipsState[0].id, msg.data.userBagEquipsState[1].id, msg.data.userBagEquipsState[2].id];
+		} else {
+			console.log(msg.msg);
+			EquipsState = [0, 0, 0];
+		}
+		return EquipsState;
+	});
+}
+
 // 先检测状态，然后换装备
 const sleep = (delay) => new Promise((resolve) => setTimeout(resolve, delay));
-async function* main(userid, endequipid, carryequipid, roomName, roomPassWord, difficulty, palyerNum) {
+async function* main(userid, equipid, roomName, roomPassWord, difficulty, palyerNum) {
 	LieMoInfo = await getMyProgress(userid);
 	await sleep(1000);
 	if (LieMoInfo[0] == 0) {
 		console.log("***继续当前猎魔***");
 	}else if (LieMoInfo[0] == -1) {
 		console.log("***开始猎魔***");
-		await equip(userid, endequipid, carryequipid);
+		EquipsState = await getAttributesInfo(userid);
+		await sleep(1000);
+		await equip(userid, EquipsState, equipid);
 		await sleep(500);
 		await createLieMoRoom(userid, roomName, roomPassWord, difficulty, palyerNum);
 		await sleep(500);
-		await equip(userid, carryequipid, endequipid);
+		await equip(userid, equipid, EquipsState);
 		await sleep(500);
 	}
 }
 // 猎魔单刷
-const task = main("4837a285-bb1a-4f9a-886e-946a3e11597a", [153114, 150948, 146211], [145320, 150948, 132974], "葱芽" , "", 3, 1);
+const task = main("4837a285-bb1a-4f9a-886e-946a3e11597a", [145320, 150948, 132974], "葱芽" , "", 3, 1);
 task.next()
