@@ -1,7 +1,7 @@
 const sleep = (delay) => new Promise((resolve) => setTimeout(resolve, delay));
 async function dazuo(userid, mapname, mapx, mapy, maxrun) {
 	for (let count = 0; count < maxrun; count++) {
-		await sleep(4200)
+		await sleep(4000)
 		console.log("第" + (count + 1) + "次打坐");
 		var request = require('request');
 		var options = {
@@ -73,7 +73,7 @@ async function upgrade(userid, type) {
 async function* main() {
 	for (let count = 0; count < 60; count++) {
 		yield upgrade("4837a285-bb1a-4f9a-886e-946a3e11597a", 2);
-		yield dazuo("4837a285-bb1a-4f9a-886e-946a3e11597a", "殒神林2", 1, 2, 100);
+		yield dazuo("4837a285-bb1a-4f9a-886e-946a3e11597a", "无极山1", 1, 2, 100);
 	}
 }
 const task = main()

@@ -205,7 +205,7 @@ async function main(userid, HunEquipId, LinEquipId) {
 		console.log("***没有剩余次数，不进行讨伐***");
 	}
 }
-main("4837a285-bb1a-4f9a-886e-946a3e11597a", [132974, 134721, 145529], [150948,153114,155025]);
+main("4837a285-bb1a-4f9a-886e-946a3e11597a", [132974, 134721, 145529], [155025, 156526, 156328]);
 
 // 收集boss信息，为自动化做准备
 // "gameCopyBossInto": {

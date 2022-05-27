@@ -60,8 +60,6 @@ async function experiencedongfu(userid, type, lv, maxrun) {
 	}
 }
 async function buydongfu(userid, number) {
-	await sleep(500)
-	console.log("购买次数");
 	var request = require('request');
 	var options = {
 		'method': 'POST',
@@ -133,6 +131,8 @@ async function main(userid) {
 		} else if (dongfuInfo[1] > 0 && dongfuInfo[2] > 0) {
 			console.log("***次数充足，开始副本***");
 			await experiencedongfu(userid, 1, 30, 3);
+			await sleep(500)
+			console.log("***购买次数***");
 			await buydongfu(userid, 3, 1);
 			await experiencedongfu(userid, 1, 30, 3);
 		}

@@ -227,4 +227,4 @@ async function main(userid, equipid, roomName, roomPassWord, difficulty, palyerN
 	}
 }
 // 猎魔单刷
-main("4837a285-bb1a-4f9a-886e-946a3e11597a", [145320, 155025, 132974], "葱芽" , "", 3, 1);
+main("4837a285-bb1a-4f9a-886e-946a3e11597a", [149802, 156526, 160622], "葱芽" , "", 3, 1);

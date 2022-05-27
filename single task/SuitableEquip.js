@@ -20,7 +20,7 @@ async function getUserBag(userid) {
 		// 法器列表
 		if (msg.code == 0) {
 			EquipList = msg.data.userBagEquipList;
-			// console.log(`共有${EquipList.length}件法器`);
+			console.log(`共有${EquipList.length}件法器`);
 		} else {
 			console.log(msg.msg);
 			EquipList = [];

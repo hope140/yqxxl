@@ -29,14 +29,14 @@ async function dazuo(userid, mapname, mapx, mapy) {
 	});
 }
 
-// 主函数 4200毫秒间隔，气血满后自动停止打坐
+// 主函数 4000毫秒间隔，气血满后自动停止打坐
 
 const sleep = (delay) => new Promise((resolve) => setTimeout(resolve, delay));
 async function sit(userid, mapname, mapx, mapy) {
 	for (let count = 0; count < 30; count++) {
 		console.log(`第${count + 1}次打坐`);
 		userstate = await dazuo(userid, mapname, mapx, mapy);
-		await sleep(4200);
+		await sleep(4000);
 		if (userstate[0] == 0 && userstate[1] === userstate[2] && userstate[3] === userstate[4] && userstate[5] === userstate[6]) {
 			console.log("***状态已满，结束***");
 			break;
@@ -44,4 +44,4 @@ async function sit(userid, mapname, mapx, mapy) {
 	}
 }
 // ID 打坐地图名称 x轴位置 y轴位置
-sit("4837a285-bb1a-4f9a-886e-946a3e11597a", "殒神林2", 4, 2, 0)
+sit("4837a285-bb1a-4f9a-886e-946a3e11597a", "无极山1", 4, 2, 0)

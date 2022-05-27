@@ -34,8 +34,8 @@ async function main(userid, mapname, mapx, mapy, offlinenum) {
 	for (let count = 0; count < 100; count++) {
 		console.log(`第${count + 1}次采药`);
 		collection(userid, mapname, mapx, mapy, offlinenum);
-		await sleep(4200)
+		await sleep(4000)
 	}
 }
 // ID 采药地图名称 x轴位置 y轴位置 使用元气数量
-main("4837a285-bb1a-4f9a-886e-946a3e11597a", "殒神林1", 3, 7, 0)
+main("4837a285-bb1a-4f9a-886e-946a3e11597a", "武林溪2", 3, 7, 0)

@@ -59,7 +59,7 @@ async function dazuo(userid, mapname, mapx, mapy) {
 	});
 }
 
-// 4200毫秒间隔，气血满后自动停止打坐
+// 4000毫秒间隔，气血满后自动停止打坐
 
 const sleep = (delay) => new Promise((resolve) => setTimeout(resolve, delay));
 async function main(userid, mapname, sitmap, mapx, mapy, offlinenum, lv) {
@@ -67,7 +67,7 @@ async function main(userid, mapname, sitmap, mapx, mapy, offlinenum, lv) {
 		console.log(`第${count + 1}次采药`);
 		try {
 			userhunMp = await collection(userid, mapname, mapx, mapy, offlinenum);
-			await sleep(4200);
+			await sleep(4000);
 			if (userhunMp[0] == 0 && userhunMp[1] < lv * 10) throw ("魂力不足");
 			if (userhunMp[0] == -1) throw ("采药失败，魂力不足");
 		} catch (Error) {
@@ -75,7 +75,7 @@ async function main(userid, mapname, sitmap, mapx, mapy, offlinenum, lv) {
 			for (let count = 0; count < 30; count++) {
 				console.log(`第${count + 1}次打坐`);
 				hunMp = await dazuo(userid, sitmap, mapx, mapy);
-				await sleep(4200);
+				await sleep(4000);
 				if (hunMp[0] == 0 && hunMp[1] === hunMp[2]) {
 					console.log("***魂力已满，结束***");
 					break;
@@ -85,4 +85,4 @@ async function main(userid, mapname, sitmap, mapx, mapy, offlinenum, lv) {
 	}
 }
 // ID 采药地图名称 打坐地图名称 x轴位置 y轴位置 使用元气数量 当前魂等级
-main("4837a285-bb1a-4f9a-886e-946a3e11597a", "殒神林1", "殒神林2", 1, 2, 0, 5)
+main("4837a285-bb1a-4f9a-886e-946a3e11597a", "武林溪2", "无极山1", 1, 2, 0, 5)

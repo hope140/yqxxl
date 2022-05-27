@@ -29,7 +29,7 @@ async function main(userid, offlinenum) {
 	for (let count = 0; count < 100; count++) {
 		console.log(`第${count + 1}次炼体`);
 		lianti(userid, offlinenum);
-		await sleep(4200)
+		await sleep(4000)
 	}
 }
 // ID 使用元气数量

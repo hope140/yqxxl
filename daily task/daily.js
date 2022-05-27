@@ -57,7 +57,7 @@ async function rewards(userid, type, id, maxrun) {
 			if (msg.code == 0) {
 				console.log(msg.data.msg);
 			} else {
-				console.log(msg.msg.replace("异常操作", "该任务不存在"));
+				console.log(msg.msg.replace("异常操作", "没有刷出该任务"));
 			}
 		});
 	}
@@ -105,7 +105,7 @@ async function getFieldGift(userid) {
 		if (error) throw new Error(error);
 		msg = JSON.parse(response.body);
 		if (msg.code == 0) {
-			console.log(msg.data.msg);
+			console.log(msg.data.msg.replace("获得", "领取成功,当前共有"));
 		} else {
 			console.log(msg.msg);
 		}

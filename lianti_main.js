@@ -53,7 +53,7 @@ async function dazuo(userid, mapname, mapx, mapy) {
 	});
 }
 
-// 4200毫秒间隔，气血满后自动停止打坐
+// 4000毫秒间隔，气血满后自动停止打坐
 
 const sleep = (delay) => new Promise((resolve) => setTimeout(resolve, delay));
 async function main(userid, mapname, mapx, mapy, offlinenum) {
@@ -61,7 +61,7 @@ async function main(userid, mapname, mapx, mapy, offlinenum) {
 		console.log(`第${count + 1}次炼体`);
 		try {
 			state = await lianti(userid, offlinenum);
-			await sleep(4200);
+			await sleep(4000);
 			if (state[0] == 0 && state[1] < state[2]/10) throw ("气血不足");
 			if (state[0] == 0 && state[3] < state[4]/10) throw ("灵气不足");
 		} catch (Error) {
@@ -69,7 +69,7 @@ async function main(userid, mapname, mapx, mapy, offlinenum) {
 			for (let count = 0; count < 30; count++) {
 				console.log(`第${count + 1}次打坐`);
 				userstate = await dazuo(userid, mapname, mapx, mapy);
-				await sleep(4200);
+				await sleep(4000);
 				if (userstate[0] == 0 && userstate[1] === userstate[2] && userstate[3] === userstate[4]) {
 					console.log("***状态已满，结束***");
 					break;
@@ -79,4 +79,4 @@ async function main(userid, mapname, mapx, mapy, offlinenum) {
 	}
 }
 //  ID 打坐地图名称 x轴位置 y轴位置 使用元气数量
-main("4837a285-bb1a-4f9a-886e-946a3e11597a", "殒神林2", 1, 2, 0)
+main("4837a285-bb1a-4f9a-886e-946a3e11597a", "无极山1", 1, 2, 0)
