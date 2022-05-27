@@ -19,11 +19,11 @@ async function experience(userid, mapname, mapx, mapy, offlinenum) {
 		if (error) throw new Error(error);
 		msg = JSON.parse(response.body);
 		if (msg.code == 0) {
-			console.log(`获得材料:${msg.data.propInfo.name}`, `状态：灵值${msg.data.userLv.linExp}`, `武值${msg.data.userLv.wuExp}`, `魂值${msg.data.userLv.hunExp}`);
-			state = [msg.code, msg.data.userStateInfo.hp, msg.data.userStateInfo.hpMax, msg.data.userStateInfo.linMp, msg.data.userStateInfo.linMpMax, msg.data.userStateInfo.hunMp, msg.data.userStateInfo.hunMpMax];
+			console.log(`获得材料:${msg.data.propInfo.name}`, `回合数：${msg.data.titles.length-1}`, `状态：灵值${msg.data.userLv.linExp}`, `武值${msg.data.userLv.wuExp}`, `魂值${msg.data.userLv.hunExp}`);
+			state = [msg.code, msg.data.userStateInfo.hp, msg.data.userStateInfo.hpMax, msg.data.userStateInfo.linMp, msg.data.userStateInfo.linMpMax, msg.data.userStateInfo.hunMp, msg.data.userStateInfo.hunMpMax, msg.data.titles.length-1];
 		} else {
 			console.log(msg.msg);
-			state = [msg.code, 0, 0, 0, 0, 0, 0];
+			state = [msg.code, 0, 0, 0, 0, 0, 0, 0];
 		}
 		return state;
 	});
@@ -67,7 +67,10 @@ async function main(userid, mapname, sitmap, mapx, mapy, offlinenum) {
 		console.log(`第${count + 1}次历练`);
 		try {
 			state = await experience(userid, mapname, mapx, mapy, offlinenum);
-			await sleep(4000);
+			await sleep(4100);
+			if (state[7] > 4){
+				await sleep((state[7]-4)/2*1600);
+			}
 			if (state[0] == 0 && state[1] < state[2] / 10 ) throw ("气血不足");
 			if (state[0] == 0 && state[3] < state[4] / 10 ) throw ("灵力不足");
 // 			if (state[0] == 0 && state[5] < state[6] / 10 ) throw ("魂力不足");
@@ -89,4 +92,4 @@ async function main(userid, mapname, sitmap, mapx, mapy, offlinenum) {
 }
 
 // ID 历练地图名称 x轴位置 y轴位置 使用元气数量
-main("4837a285-bb1a-4f9a-886e-946a3e11597a", "无极山1", "无极山1",1, 2, 0)
+main("4837a285-bb1a-4f9a-886e-946a3e11597a", "无极山2", "无极山1",1, 2, 0)
