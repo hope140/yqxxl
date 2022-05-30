@@ -18,7 +18,7 @@ async function collection(userid, mapname, mapx, mapy, offlinenum) {
 		if (error) throw new Error(error);
 		msg = JSON.parse(response.body);
 		if (msg.code == 0) {
-			console.log(`获得材料:${msg.data.propInfo.name}`, `状态：魂值${msg.data.userStateInfo.hunMp}/${msg.data.userStateInfo.hunMpMax}`);
+			console.log(`获得${msg.data.userBagProp.propNumber}个${msg.data.propInfo.name}`, `状态：魂值${msg.data.userStateInfo.hunMp}/${msg.data.userStateInfo.hunMpMax}`);
 			userhunMp = [msg.code, msg.data.userStateInfo.hunMp, msg.data.userStateInfo.hunMpMax];
 		} else {
 			console.log(msg.msg);
