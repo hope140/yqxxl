@@ -1,7 +1,7 @@
 const sleep = (delay) => new Promise((resolve) => setTimeout(resolve, delay));
 async function dazuo(userid, mapname, mapx, mapy, maxrun) {
 	for (let count = 0; count < maxrun; count++) {
-		await sleep(4200)
+		await sleep(4000)
 		console.log("第" + (count + 1) + "次打坐");
 		var request = require('request');
 		var options = {
@@ -21,7 +21,7 @@ async function dazuo(userid, mapname, mapx, mapy, maxrun) {
 			// if (error) throw new Error(error);
 			msg = JSON.parse(response.body);
 			if (msg.code == 0) {
-				console.log("气血:" + msg.data.userStateInfo.hp + "/" + msg.data.userStateInfo.hpMax + " 灵：" + msg.data.userStateInfo.linMp + "/" + msg.data.userStateInfo.linMpMax + " 魂：" + msg.data.userStateInfo.hunMp + "/" + msg.data.userStateInfo.hunMpMax);
+				console.log(`气血:${msg.data.userStateInfo.hp}/${msg.data.userStateInfo.hpMax} 灵：${msg.data.userStateInfo.linMp}/${msg.data.userStateInfo.linMpMax} 魂：${msg.data.userStateInfo.hunMp}/${msg.data.userStateInfo.hunMpMax}`);
 				userState = msg.data.userStateInfo;
 			} else if (msg.code == -3) {
 				console.log(msg.msg);
@@ -63,7 +63,7 @@ async function upgrade(userid, type) {
 		// if (error) throw new Error(error);
 		msg = JSON.parse(response.body);
 		if (msg.code == 0) {
-			console.log(msg.data.msg + " 等级：" + msg.data.userLv.wuLv + "级武者" + msg.data.userLv.linLv + "级灵者" + msg.data.userLv.hunLv + "级炼药师");
+			console.log(`${msg.data.msg} 等级：${msg.data.userLv.wuLv}级武者${msg.data.userLv.linLv}级灵者${msg.data.userLv.hunLv}级炼药师`);
 		} else {
 			console.log(msg.msg);
 		}
@@ -73,7 +73,7 @@ async function upgrade(userid, type) {
 async function* main() {
 	for (let count = 0; count < 60; count++) {
 		yield upgrade("4837a285-bb1a-4f9a-886e-946a3e11597a", 2);
-		yield dazuo("4837a285-bb1a-4f9a-886e-946a3e11597a", "殒神林2", 1, 2, 100);
+		yield dazuo("4837a285-bb1a-4f9a-886e-946a3e11597a", "无极山1", 1, 2, 100);
 	}
 }
 const task = main()

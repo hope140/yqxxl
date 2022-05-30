@@ -21,7 +21,6 @@ async function carryEquip(userid, userBagEquipId) {
 			console.log(msg.msg);
 		}
 	});
-	task.next("使用成功");
 }
 
 async function endEquip(userid, userBagEquipId) {
@@ -46,7 +45,6 @@ async function endEquip(userid, userBagEquipId) {
 			console.log(msg.msg);
 		}
 	});
-	task.next("卸下成功");
 }
 
 async function lockEquip(userid, userBagEquipId) {
@@ -71,7 +69,6 @@ async function lockEquip(userid, userBagEquipId) {
 			console.log(msg.msg);
 		}
 	});
-	task.next("锁定成功");
 }
 
 async function getMyProgress(userid) {
@@ -91,13 +88,40 @@ async function getMyProgress(userid) {
 		if (error) throw new Error(error);
 		msg = JSON.parse(response.body);
 		if (msg.code == 0) {
-			console.log(msg.data.playerNum + "人队伍" + "，名称：" + msg.data.lieMoRoomInfo.roomName + "，难度：" + msg.data.lieMoRoomInfo.difficulty);
+			console.log(`${msg.data.playerNum}人队伍，名称：${msg.data.lieMoRoomInfo.roomName}，难度：${msg.data.lieMoRoomInfo.difficulty}`);
 			LieMoInfo = [msg.code, msg.data.lieMoRoomInfo.roomId];
 		} else {
 			console.log(msg.msg);
 			LieMoInfo = [msg.code, 0];
 		}
 		return LieMoInfo;
+	});
+}
+
+async function getUserLieMoInfo(userid) {
+	console.log("***剩余猎魔次数***");
+	var request = require('request');
+	var options = {
+		'method': 'POST',
+		'url': 'https://yqxxl.yqbros.com/Yqxxl/LieMo/getUserLieMoInfo',
+		'headers': {
+			'Content-Type': 'application/json'
+		},
+		body: JSON.stringify({
+			"userId": userid
+		})
+	};
+	request(options, function (error, response) {
+		if (error) throw new Error(error);
+		msg = JSON.parse(response.body);
+		if (msg.code == 0) {
+			console.log(`剩余创建次数：${msg.data.userLieMoInfo.creatNum}，剩余加入次数${msg.data.userLieMoInfo.joinNum}，剩余奖励次数${msg.data.userLieMoInfo.rewardNum}`);
+			LieMoNum = [msg.data.userLieMoInfo.creatNum, msg.data.userLieMoInfo.joinNum, msg.data.userLieMoInfo.rewardNum];
+		} else {
+			console.log(msg.msg);
+			LieMoNum = [0, 0, 0];
+		}
+		return LieMoNum;
 	});
 }
 
@@ -123,8 +147,7 @@ async function createLieMoRoom(userid, roomName, roomPassWord, difficulty, palye
 		if (error) throw new Error(error);
 		msg = JSON.parse(response.body);
 		if (msg.code == 0) {
-			// console.log(`${msg.data.playerNum}人队伍，名称：${msg.data.lieMoRoomInfo.roomName}，难度：${msg.data.lieMoRoomInfo.difficulty}`);
-			console.log(msg);
+			console.log(msg.data.msg);
 		} else {
 			console.log("创建失败，" + msg.msg);
 		}
@@ -152,23 +175,56 @@ async function equip(userid, endequipid, carryequipid) {
 	await sleep(200);
 }
 
+async function getAttributesInfo(userid) {
+	console.log("***获取当前角色状态***");
+	await sleep(100)
+	var request = require('request');
+	var options = {
+		'method': 'POST',
+		'url': 'https://yqxxl.yqbros.com/Yqxxl/User/getAttributesInfo',
+		'headers': {
+			'Content-Type': 'application/json'
+		},
+		body: JSON.stringify({
+			"userId": userid
+		})
+	};
+	request(options, function (error, response) {
+		// if (error) throw new Error(error);
+		msg = JSON.parse(response.body);
+		if (msg.code == 0) {
+			console.log(`角色当前装备${msg.data.userBagEquipsState[0].id},${msg.data.userBagEquipsState[1].id},${msg.data.userBagEquipsState[2].id}`);
+			EquipsState = [msg.data.userBagEquipsState[0].id, msg.data.userBagEquipsState[1].id, msg.data.userBagEquipsState[2].id];
+		} else {
+			console.log(msg.msg);
+			EquipsState = [0, 0, 0];
+		}
+		return EquipsState;
+	});
+}
+
 // 先检测状态，然后换装备
 const sleep = (delay) => new Promise((resolve) => setTimeout(resolve, delay));
-async function* main(userid, endequipid, carryequipid, roomName, roomPassWord, difficulty, palyerNum) {
+async function main(userid, equipid, roomName, roomPassWord, difficulty, palyerNum) {
 	LieMoInfo = await getMyProgress(userid);
+	await sleep(1000);
+	LieMoNum = await getUserLieMoInfo(userid);
 	await sleep(1000);
 	if (LieMoInfo[0] == 0) {
 		console.log("***继续当前猎魔***");
-	}else if (LieMoInfo[0] == -1) {
+	}else if (LieMoInfo[0] == -1 && LieMoNum[0] > 0) {
 		console.log("***开始猎魔***");
-		await equip(userid, endequipid, carryequipid);
+		EquipsState = await getAttributesInfo(userid);
+		await sleep(1000);
+		await equip(userid, EquipsState, equipid);
 		await sleep(500);
 		await createLieMoRoom(userid, roomName, roomPassWord, difficulty, palyerNum);
 		await sleep(500);
-		await equip(userid, carryequipid, endequipid);
+		await equip(userid, equipid, EquipsState);
 		await sleep(500);
+	}else{
+		console.log("***无创建次数***");
 	}
 }
 // 猎魔单刷
-const task = main("4837a285-bb1a-4f9a-886e-946a3e11597a", [153114, 150948, 146211], [145320, 150948, 132974], "葱芽" , "", 1, 1);
-task.next()
+main("4837a285-bb1a-4f9a-886e-946a3e11597a", [149802, 156526, 160622], "葱芽" , "", 3, 1);

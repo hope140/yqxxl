@@ -21,7 +21,7 @@ async function makeDrug(userid, drugid, lists, lv, maxrun) {
 			// if (error) throw new Error(error);
 			msg = JSON.parse(response.body);
 			if (msg.code == 0) {
-				console.log(msg.data.msg + " 丹雷状态" + msg.data.userMakeDrug.danleiHp + "/" + msg.data.userMakeDrug.danleiHpMax);
+				console.log(`${msg.data.msg} 丹雷状态${msg.data.userMakeDrug.danleiHp}/${msg.data.userMakeDrug.danleiHpMax}`);
 			} else {
 				console.log(msg.msg);
 			}

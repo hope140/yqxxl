@@ -16,8 +16,8 @@ async function findUserTask(userid) {
 		// if (error) throw new Error(error);
 		msg = JSON.parse(response.body);
 	});
-	task.next('刷新任务完成');
 }
+// 刷新远征
 async function getGameCopyInfo(userid) {
 	await sleep(100)
 	var request = require('request');
@@ -35,9 +35,45 @@ async function getGameCopyInfo(userid) {
 		// if (error) throw new Error(error);
 		msg = JSON.parse(response.body);
 	});
-	task.next('刷新讨伐邪魔次数结束，开始下一步');
 }
-
+// 刷新法宝
+async function getUserGainPropInfo(userid) {
+	await sleep(100)
+	var request = require('request');
+	var options = {
+		'method': 'POST',
+		'url': 'https://yqxxl.yqbros.com/Yqxxl/GainProp/getUserGainPropInfo',
+		'headers': {
+			'Content-Type': 'application/json'
+		},
+		body: JSON.stringify({
+			"userId": userid
+		})
+	};
+	request(options, function (error, response) {
+		// if (error) throw new Error(error);
+		msg = JSON.parse(response.body);
+	});
+}
+// 刷新灵石
+async function getUserSuperStoneInfo(userid) {
+	await sleep(100)
+	var request = require('request');
+	var options = {
+		'method': 'POST',
+		'url': 'https://yqxxl.yqbros.com/Yqxxl/SuperStone/getUserSuperStoneInfo',
+		'headers': {
+			'Content-Type': 'application/json'
+		},
+		body: JSON.stringify({
+			"userId": userid
+		})
+	};
+	request(options, function (error, response) {
+		// if (error) throw new Error(error);
+		msg = JSON.parse(response.body);
+	});
+}
 async function rewards(userid, type, id, maxrun) {
 	for (let count = 0; count < maxrun; count++) {
 		var request = require('request');
@@ -59,11 +95,10 @@ async function rewards(userid, type, id, maxrun) {
 			if (msg.code == 0) {
 				console.log(msg.data.msg);
 			} else {
-				console.log(msg.msg.replace("异常操作", "该任务不存在"));
+				console.log(msg.msg.replace("异常操作", "没有刷出该任务"));
 			}
 		});
 	}
-	task.next('每日任务结束，开始下一步');
 }
 async function taskreward(userid, type, maxrun) {
 	for (let count = 0; count < maxrun; count++) {
@@ -89,7 +124,6 @@ async function taskreward(userid, type, maxrun) {
 			}
 		});
 	}
-	task.next('宝箱领取结束，开始下一步');
 }
 // 遍历所有的每日任务，然后领取每日宝箱，从9点宝箱开始
 
@@ -109,36 +143,36 @@ async function getFieldGift(userid) {
 		if (error) throw new Error(error);
 		msg = JSON.parse(response.body);
 		if (msg.code == 0) {
-			console.log(msg.data.msg);
+			console.log(msg.data.msg.replace("获得", "领取成功,当前共有"));
 		} else {
 			console.log(msg.msg);
 		}
 	});
-	task.next('药田次数领取结束，开始下一步');
 }
 
-
-async function* main(userid) {
-	yield findUserTask(userid);
-	yield getGameCopyInfo(userid);
+async function main(userid) {
+	await findUserTask(userid);
+	await getGameCopyInfo(userid);
+	await getUserGainPropInfo(userid);
+	await getUserSuperStoneInfo(userid);
+	await sleep(1000);
 	// console.log('***每日任务开始***');
 	for (let i = 1; i < 11; i++) {
 		console.log("每日任务" + i);
-		yield rewards(userid, 0, i, 1);
+		await rewards(userid, 0, i, 1);
 		await sleep(1000)
 	}
 	for (let i = 2; i > 0; i--) {
 		console.log("***宝箱领取***");
-		yield taskreward(userid, i, 1);
+		await taskreward(userid, i, 1);
 		await sleep(1000)
 	}
 	for (let i = 1; i < 2; i++) {
 		console.log("***每日签到***")
-		yield rewards(userid, 5, i, 1);
+		await rewards(userid, 5, i, 1);
 		await sleep(1000)
 	}
 	console.log("***药田次数领取***");
-	yield getFieldGift(userid);
+	await getFieldGift(userid);
 }
-const task = main("4837a285-bb1a-4f9a-886e-946a3e11597a")
-task.next()
+main("4837a285-bb1a-4f9a-886e-946a3e11597a")

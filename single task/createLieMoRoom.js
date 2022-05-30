@@ -22,7 +22,7 @@ async function createLieMoRoom(userid, roomName, roomPassWord, difficulty, palye
 		msg = JSON.parse(response.body);
 		if (msg.code == 0) {
 			// console.log(`${msg.data.playerNum}人队伍，名称：${msg.data.lieMoRoomInfo.roomName}，难度：${msg.data.lieMoRoomInfo.difficulty}`);
-			console.log(msg);
+			console.log(msg.data.msg);
 		} else {
 			console.log("创建失败，" + msg.msg);
 		}

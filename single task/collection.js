@@ -18,7 +18,7 @@ async function collection(userid, mapname, mapx, mapy, offlinenum) {
 		// if (error) throw new Error(error);
 		msg = JSON.parse(response.body);
 		if (msg.code == 0) {
-			console.log("获得材料:" + msg.data.propInfo.name, "状态：" + "魂值" + msg.data.userStateInfo.hunMp + "/" + msg.data.userStateInfo.hunMpMax);
+			console.log(`获得材料:${msg.data.propInfo.name}`, `状态：魂值${msg.data.userStateInfo.hunMp}/${msg.data.userStateInfo.hunMpMax}`);
 		} else if (msg.code == -3) {
 			console.log("请求超时，同时运行多个脚本或游戏未退出，请检查！");
 		} else {
@@ -26,18 +26,16 @@ async function collection(userid, mapname, mapx, mapy, offlinenum) {
 		}
 		// console.log(msg);
 	});
-	task.next("一轮采药结束");
 }
 
 
 const sleep = (delay) => new Promise((resolve) => setTimeout(resolve, delay));
-async function* main(userid, mapname, mapx, mapy, offlinenum) {
+async function main(userid, mapname, mapx, mapy, offlinenum) {
 	for (let count = 0; count < 100; count++) {
-		console.log("第" + (count + 1) + "次采药");
+		console.log(`第${count + 1}次采药`);
 		collection(userid, mapname, mapx, mapy, offlinenum);
-		await sleep(4200)
+		await sleep(4000)
 	}
 }
 // ID 采药地图名称 x轴位置 y轴位置 使用元气数量
-const task = main("4837a285-bb1a-4f9a-886e-946a3e11597a", "殒神林1", 3, 7, 0)
-task.next()
+main("4837a285-bb1a-4f9a-886e-946a3e11597a", "武林溪2", 3, 7, 0)

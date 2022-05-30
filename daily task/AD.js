@@ -44,12 +44,11 @@ async function AD(userid) {
 	});
 }
 const sleep = (delay) => new Promise((resolve) => setTimeout(resolve, delay));
-async function* main(userid) {
+async function main(userid) {
 	console.log("***刷新广告状态***");
 	await getUserADInfo(userid);
 	await sleep(1000);
 	console.log("***领取奖励***");
 	await AD(userid);
 }
-const task = main("4837a285-bb1a-4f9a-886e-946a3e11597a");
-task.next();
+main("4837a285-bb1a-4f9a-886e-946a3e11597a");

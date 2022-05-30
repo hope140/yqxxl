@@ -21,7 +21,6 @@ async function carryEquip(userid, userBagEquipId) {
 			console.log(msg.msg);
 		}
 	});
-	task.next("使用成功");
 }
 
 async function endEquip(userid, userBagEquipId) {
@@ -46,7 +45,6 @@ async function endEquip(userid, userBagEquipId) {
 			console.log(msg.msg);
 		}
 	});
-	task.next("卸下成功");
 }
 
 async function lockEquip(userid, userBagEquipId) {
@@ -71,29 +69,62 @@ async function lockEquip(userid, userBagEquipId) {
 			console.log(msg.msg);
 		}
 	});
-	task.next("锁定成功");
+}
+
+async function getAttributesInfo(userid) {
+	console.log("***获取当前角色状态***");
+	await sleep(100)
+	var request = require('request');
+	var options = {
+		'method': 'POST',
+		'url': 'https://yqxxl.yqbros.com/Yqxxl/User/getAttributesInfo',
+		'headers': {
+			'Content-Type': 'application/json'
+		},
+		body: JSON.stringify({
+			"userId": userid
+		})
+	};
+	request(options, function (error, response) {
+		// if (error) throw new Error(error);
+		msg = JSON.parse(response.body);
+		if (msg.code == 0) {
+			console.log(`角色当前装备${msg.data.userBagEquipsState[0].id},${msg.data.userBagEquipsState[1].id},${msg.data.userBagEquipsState[2].id}`);
+			EquipsState = [msg.data.userBagEquipsState[0].id, msg.data.userBagEquipsState[1].id, msg.data.userBagEquipsState[2].id];
+		} else {
+			console.log(msg.msg);
+			EquipsState = [0, 0, 0];
+		}
+		return EquipsState;
+	});
 }
 
 const sleep = (delay) => new Promise((resolve) => setTimeout(resolve, delay));
-async function* main(userid, endequipid, carryequipid) {
+async function equip(userid, endequipid, carryequipid) {
 	console.log("***卸装备***");
 	for (let i = 0; i < 3; i++) {
 		await endEquip(userid, endequipid[i]);
-		await sleep(200);
+		await sleep(400);
 	}
-	await sleep(200);
+	await sleep(500);
 	console.log("***穿装备***");
 	for (let i = 0; i < 3; i++) {
 		await carryEquip(userid, carryequipid[i]);
-		await sleep(200);
+		await sleep(400);
 	}
-	await sleep(200);
+	await sleep(500);
 	console.log("***锁装备***");
 	for (let i = 0; i < 3; i++) {
 		await lockEquip(userid, endequipid[i]);
-		await sleep(200);
+		await sleep(400);
 	}
-	await sleep(200);
+	await sleep(500);
+}
+
+async function main(userid,equipid){
+	EquipsState = await getAttributesInfo(userid);
+	await sleep(1000);
+	await equip(userid, EquipsState, equipid);
 }
 // 卸下 换装 锁定
 // 魂换灵
@@ -106,5 +137,6 @@ async function* main(userid, endequipid, carryequipid) {
 // const task = main("4837a285-bb1a-4f9a-886e-946a3e11597a", [153114, 150948, 146211], [145320, 150948, 132974]);
 
 // 猎魔还原
-const task = main("4837a285-bb1a-4f9a-886e-946a3e11597a", [145320, 150948, 132974], [153114, 150948, 146211]);
-task.next()
+main("4837a285-bb1a-4f9a-886e-946a3e11597a", [150948, 153114, 146211]);
+
+

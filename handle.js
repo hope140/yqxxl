@@ -44,7 +44,7 @@ async function dazuo(userid, mapname, mapx, mapy) {
 		if (error) throw new Error(error);
 		msg = JSON.parse(response.body);
 		if (msg.code == 0) {
-			console.log("气血:" + msg.data.userStateInfo.hp + "/" + msg.data.userStateInfo.hpMax + " 灵：" + msg.data.userStateInfo.linMp + "/" + msg.data.userStateInfo.linMpMax + " 魂：" + msg.data.userStateInfo.hunMp + "/" + msg.data.userStateInfo.hunMpMax);
+			console.log(`气血:${msg.data.userStateInfo.hp}/${msg.data.userStateInfo.hpMax} 灵：${msg.data.userStateInfo.linMp}/${msg.data.userStateInfo.linMpMax} 魂：${msg.data.userStateInfo.hunMp}/${msg.data.userStateInfo.hunMpMax}`);
 			userstate = [msg.code, msg.data.userStateInfo.hp, msg.data.userStateInfo.hpMax, msg.data.userStateInfo.linMp, msg.data.userStateInfo.linMpMax, msg.data.userStateInfo.hunMp, msg.data.userStateInfo.hunMpMax];
 		} else {
 			console.log(msg.msg);
@@ -52,7 +52,6 @@ async function dazuo(userid, mapname, mapx, mapy) {
 		}
 		return userstate;
 	});
-	// task.next("一轮打坐结束");
 }
 // 抗雷函数 参数：用户ID, 抗雷消耗类型
 async function handle(userid, type) {
@@ -72,7 +71,7 @@ async function handle(userid, type) {
 		if (error) throw new Error(error);
 		msg = JSON.parse(response.body);
 		if (msg.code == 0) {
-			console.log(msg.data.msg + " 丹雷剩余：" + msg.data.userMakeDrug.danleiHp + "/" + msg.data.userMakeDrug.danleiHpMax);
+			console.log(`${msg.data.msg} 丹雷剩余：${msg.data.userMakeDrug.danleiHp}/${msg.data.userMakeDrug.danleiHpMax}`);
 			drughp = [msg.code, msg.data.userMakeDrug.danleiHp, msg.data.userMakeDrug.danleiHpMax];
 		} else {
 			console.log(msg.msg);
@@ -80,13 +79,12 @@ async function handle(userid, type) {
 		}
 		return drughp;
 	});
-	task.next("一次抗雷结束");
 }
 
-// 4200毫秒间隔，状态满后自动停止打坐
+// 4000毫秒间隔，状态满后自动停止打坐
 
 const sleep = (delay) => new Promise((resolve) => setTimeout(resolve, delay));
-async function* main(userid, mapname, mapx, mapy) {
+async function main(userid, mapname, mapx, mapy) {
 	console.log("***开始抗雷***");
 	for (let count = 0; count < 30; count++) {
 		try {
@@ -99,16 +97,16 @@ async function* main(userid, mapname, mapx, mapy) {
 			if (drughp[0] == 0 && drughp[1] < 0) break;
 			if (drughp[0] == -1 && drughp[3] == "异常信息") break;
 		} catch (error) {
-			console.log("***" + error + "，打坐***");
+			console.log(`***${error}，打坐***`);
 			userstate = await dazuo(userid, mapname, mapx, mapy);
-			await sleep(4200);
+			await sleep(4000);
 		}
 	}
 	console.log("***最后一轮打坐***");
 	for (let count = 0; count < 30; count++) {
-		console.log("第" + (count + 1) + "次打坐");
+		console.log(`第${count + 1}次打坐`);
 		userstate = await dazuo(userid, mapname, mapx, mapy);
-		await sleep(4200);
+		await sleep(4000);
 		if (userstate[0] == 0 && userstate[1] === userstate[2] && userstate[3] === userstate[4] && userstate[5] === userstate[6]) {
 			console.log("***状态已满，结束***");
 			break;
@@ -116,5 +114,4 @@ async function* main(userid, mapname, mapx, mapy) {
 	}
 }
 // ID 打坐地图名称 x轴位置 y轴位置
-const task = main("4837a285-bb1a-4f9a-886e-946a3e11597a", "殒神林2", 4, 2, 0)
-task.next()
+main("4837a285-bb1a-4f9a-886e-946a3e11597a", "无极山1", 4, 2, 0)

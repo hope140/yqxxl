@@ -60,8 +60,6 @@ async function experiencedongfu(userid, type, lv, maxrun) {
 	}
 }
 async function buydongfu(userid, number) {
-	await sleep(500)
-	console.log("购买次数");
 	var request = require('request');
 	var options = {
 		'method': 'POST',
@@ -78,7 +76,7 @@ async function buydongfu(userid, number) {
 		if (error) throw new Error(error);
 		msg = JSON.parse(response.body);
 		if (msg.code == 0) {
-			console.log("次数:" + msg.data.userDongfuInfo.number + "/" + msg.data.userDongfuInfo.maxNumber);
+			console.log(`次数:${msg.data.userDongfuInfo.number}/${msg.data.userDongfuInfo.maxNumber}`);
 		} else if (msg.code == -1) {
 			console.log("购买次数不足");
 		} else {
@@ -116,13 +114,13 @@ async function sellUserBagAll(userid, lv, quality, type, lvGrowthValue) {
 	});
 }
 
-async function* main(userid) {
+async function main(userid) {
 	console.log("***刷新副本次数***");
 	dongfuInfo = await getDongfu(userid);
 	await sleep(1000);
 	if (dongfuInfo[0] == 0) {
 		if (dongfuInfo[1] == 0 && dongfuInfo[2] == 0) {
-			console.log("二者次数均不足，停止");
+			console.log("二者次数均不足");
 		} else if (dongfuInfo[1] > 0 && dongfuInfo[2] == 0) {
 			console.log("***购买次数不足，开始副本***");
 			await experiencedongfu(userid, 1, 30, 3);
@@ -133,13 +131,13 @@ async function* main(userid) {
 		} else if (dongfuInfo[1] > 0 && dongfuInfo[2] > 0) {
 			console.log("***次数充足，开始副本***");
 			await experiencedongfu(userid, 1, 30, 3);
+			await sleep(500)
+			console.log("***购买次数***");
 			await buydongfu(userid, 3, 1);
 			await experiencedongfu(userid, 1, 30, 3);
 		}
-
 	}
 	await sleep(1000);
 	await sellUserBagAll(userid, 30, -1, -1, 0);
 }
-const task = main("4837a285-bb1a-4f9a-886e-946a3e11597a")
-task.next()
+main("4837a285-bb1a-4f9a-886e-946a3e11597a")
