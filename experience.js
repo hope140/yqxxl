@@ -19,7 +19,7 @@ async function experience(userid, mapname, mapx, mapy, offlinenum) {
 		if (error) throw new Error(error);
 		msg = JSON.parse(response.body);
 		if (msg.code == 0) {
-			console.log(`获得${msg.data.userBagProp.propNumber}个${msg.data.propInfo.name}`, `回合数：${msg.data.titles.length-1}`, `状态：灵值${msg.data.userLv.linExp}`, `武值${msg.data.userLv.wuExp}`, `魂值${msg.data.userLv.hunExp}`);
+			console.log(`获得:${msg.data.userBagProp.propNumber}个${msg.data.propInfo.name}`, `回合数：${msg.data.titles.length-1}`, `状态：灵值${msg.data.userLv.linExp}`, `武值${msg.data.userLv.wuExp}`, `魂值${msg.data.userLv.hunExp}`);
 			state = [msg.code, msg.data.userStateInfo.hp, msg.data.userStateInfo.hpMax, msg.data.userStateInfo.linMp, msg.data.userStateInfo.linMpMax, msg.data.userStateInfo.hunMp, msg.data.userStateInfo.hunMpMax, msg.data.titles.length-1];
 		} else {
 			console.log(msg.msg);

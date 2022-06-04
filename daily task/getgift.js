@@ -61,27 +61,16 @@ const sleep = (delay) => new Promise((resolve) => setTimeout(resolve, delay));
 async function main(userid) {
 	level = await getGameCopyInfo(userid);
 	await sleep(1000);
-	if (level[0] > 0) {
-		if (level[1] == level[4]) {
-			console.log("***开始扫荡武境***");
-			await getgift(userid, 1, 1, level[0]);
-		} else if (level[2] == level[4]) {
-			console.log("***开始扫荡灵境***");
-			await getgift(userid, 1, 2, level[0]);
-		} else if (level[3] == level[4]) {
-			console.log("***开始扫荡魂境***");
-			await getgift(userid, 1, 3, level[0]);
-		}
+	level1 = level.slice(0, 5);
+	level2 = level.slice(5);
+	if (level1[0] > 0) {
+		console.log(`***域外分境开始扫荡***`);
+		await getgift(userid, 1, level1.indexOf(level1.pop()), level1[0]);
 	}
 	await sleep(500);
-	if (level[5] > 0) {
-		if (level[6] == level[8]) {
-			console.log("***开始扫荡残魂-诛***");
-			await getgift(userid, 2, 1, level[5]);
-		} else if (level[7] == level[8]) {
-			console.log("***开始扫荡残魂-罚***");
-			await getgift(userid, 2, 2, level[5]);
-		}
+	if (level2[0] > 0) {
+		console.log(`***诛罚邪魔开始扫荡***`);
+		await getgift(userid, 2, level2.indexOf(level2.pop()), level2[0]);
 	}
 }
 main("4837a285-bb1a-4f9a-886e-946a3e11597a")
