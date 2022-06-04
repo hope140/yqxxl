@@ -17,63 +17,63 @@ async function findUserTask(userid) {
 		msg = JSON.parse(response.body);
 	});
 }
-// 刷新远征
-async function getGameCopyInfo(userid) {
-	await sleep(100)
-	var request = require('request');
-	var options = {
-		'method': 'POST',
-		'url': 'https://yqxxl.yqbros.com/Yqxxl/GameCopy/getGameCopyInfo',
-		'headers': {
-			'Content-Type': 'application/json'
-		},
-		body: JSON.stringify({
-			"userId": userid
-		})
-	};
-	request(options, function (error, response) {
-		// if (error) throw new Error(error);
-		msg = JSON.parse(response.body);
-	});
-}
-// 刷新法宝
-async function getUserGainPropInfo(userid) {
-	await sleep(100)
-	var request = require('request');
-	var options = {
-		'method': 'POST',
-		'url': 'https://yqxxl.yqbros.com/Yqxxl/GainProp/getUserGainPropInfo',
-		'headers': {
-			'Content-Type': 'application/json'
-		},
-		body: JSON.stringify({
-			"userId": userid
-		})
-	};
-	request(options, function (error, response) {
-		// if (error) throw new Error(error);
-		msg = JSON.parse(response.body);
-	});
-}
-// 刷新灵石
-async function getUserSuperStoneInfo(userid) {
-	await sleep(100)
-	var request = require('request');
-	var options = {
-		'method': 'POST',
-		'url': 'https://yqxxl.yqbros.com/Yqxxl/SuperStone/getUserSuperStoneInfo',
-		'headers': {
-			'Content-Type': 'application/json'
-		},
-		body: JSON.stringify({
-			"userId": userid
-		})
-	};
-	request(options, function (error, response) {
-		// if (error) throw new Error(error);
-		msg = JSON.parse(response.body);
-	});
-}
+// // 刷新远征
+// async function getGameCopyInfo(userid) {
+// 	await sleep(100)
+// 	var request = require('request');
+// 	var options = {
+// 		'method': 'POST',
+// 		'url': 'https://yqxxl.yqbros.com/Yqxxl/GameCopy/getGameCopyInfo',
+// 		'headers': {
+// 			'Content-Type': 'application/json'
+// 		},
+// 		body: JSON.stringify({
+// 			"userId": userid
+// 		})
+// 	};
+// 	request(options, function (error, response) {
+// 		// if (error) throw new Error(error);
+// 		msg = JSON.parse(response.body);
+// 	});
+// }
+// // 刷新法宝
+// async function getUserGainPropInfo(userid) {
+// 	await sleep(100)
+// 	var request = require('request');
+// 	var options = {
+// 		'method': 'POST',
+// 		'url': 'https://yqxxl.yqbros.com/Yqxxl/GainProp/getUserGainPropInfo',
+// 		'headers': {
+// 			'Content-Type': 'application/json'
+// 		},
+// 		body: JSON.stringify({
+// 			"userId": userid
+// 		})
+// 	};
+// 	request(options, function (error, response) {
+// 		// if (error) throw new Error(error);
+// 		msg = JSON.parse(response.body);
+// 	});
+// }
+// // 刷新灵石
+// async function getUserSuperStoneInfo(userid) {
+// 	await sleep(100)
+// 	var request = require('request');
+// 	var options = {
+// 		'method': 'POST',
+// 		'url': 'https://yqxxl.yqbros.com/Yqxxl/SuperStone/getUserSuperStoneInfo',
+// 		'headers': {
+// 			'Content-Type': 'application/json'
+// 		},
+// 		body: JSON.stringify({
+// 			"userId": userid
+// 		})
+// 	};
+// 	request(options, function (error, response) {
+// 		// if (error) throw new Error(error);
+// 		msg = JSON.parse(response.body);
+// 	});
+// }
 async function rewards(userid, type, id, maxrun) {
 	for (let count = 0; count < maxrun; count++) {
 		var request = require('request');
@@ -152,11 +152,16 @@ async function getFieldGift(userid) {
 
 async function main(userid) {
 	await findUserTask(userid);
-	await getGameCopyInfo(userid);
-	await getUserGainPropInfo(userid);
-	await getUserSuperStoneInfo(userid);
+	// await getGameCopyInfo(userid);
+	// await getUserGainPropInfo(userid);
+	// await getUserSuperStoneInfo(userid);
 	await sleep(1000);
-	// console.log('***每日任务开始***');
+	for (let i = 1; i < 2; i++) {
+		console.log("***每日签到***")
+		await rewards(userid, 5, i, 1);
+		await sleep(1000)
+	}
+	console.log('***每日任务开始***');
 	for (let i = 1; i < 11; i++) {
 		console.log("每日任务" + i);
 		await rewards(userid, 0, i, 1);
@@ -165,11 +170,6 @@ async function main(userid) {
 	for (let i = 2; i > 0; i--) {
 		console.log("***宝箱领取***");
 		await taskreward(userid, i, 1);
-		await sleep(1000)
-	}
-	for (let i = 1; i < 2; i++) {
-		console.log("***每日签到***")
-		await rewards(userid, 5, i, 1);
 		await sleep(1000)
 	}
 	console.log("***药田次数领取***");
