@@ -1,3 +1,11 @@
+function _copyArrayObject(arrayObject) {
+	var temp = []
+	arrayObject.forEach(element => {
+		temp.push(Object.assign({}, element))
+	});
+	return temp
+}
+
 async function makeDrug(userid, drugid, lists, lv) {
 	var request = require('request');
 	var options = {
@@ -225,23 +233,26 @@ async function findProp(userid, needVal, attribute, propNum) {
 			for (var m = 0; m < prop_input[2].length; m++) {
 				for (var n = 0; n < prop_input[3].length; n++) {
 					for (var o = 0; o < prop_input[4].length; o++) {
-						var prop_input_all = [prop_input[0][k], prop_input[1][l], prop_input[2][m], prop_input[3][n], prop_input[4][o]] , prop_equal = [];
-						// 判断五个值(prop_input_all[p].userBagProp.id)是否有相等的
-						for (var p = 0; p < 5; p++) {
-							for (var q = p + 1; q < 5; q++) {
-								if (prop_input_all[p].userBagProp.id == prop_input_all[q].userBagProp.id) {
-									prop_equal.push([p , q]);
+						var prop_input_all = _copyArrayObject([(prop_input[0][k]), (prop_input[1][l]), (prop_input[2][m]), (prop_input[3][n]), (prop_input[4][o])]), prop_equal = [];
+						val_input = propNum[0] * prop_input_all[0].propInfo.value + propNum[1] * prop_input_all[1].propInfo.value + propNum[2] * prop_input_all[2].propInfo.value + propNum[3] * prop_input_all[3].propInfo.value + propNum[4] * prop_input_all[4].propInfo.value;
+						if (val_input >= needVal && val_input - needVal <= 20000) {
+							// 判断五个值(prop_input_all[p].userBagProp.id)是否有相等的
+							for (var p = 0; p < 5; p++) {
+								for (var q = p + 1; q < 5; q++) {
+									if (prop_input_all[p].userBagProp.id == prop_input_all[q].userBagProp.id) {
+										prop_equal.push([p, q]);
+									}
 								}
 							}
-						}
-						for (var r = 0; r < prop_equal.length; r++) {
-							prop_input_all[prop_equal[r][1]].userBagProp.propNumber -= propNum[prop_equal[r][0]];
-						}
-						val_input = propNum[0] * prop_input_all[0].propInfo.value + propNum[1] * prop_input_all[1].propInfo.value + propNum[2] * prop_input_all[2].propInfo.value + propNum[3] * prop_input_all[3].propInfo.value + propNum[4] * prop_input_all[4].propInfo.value;
-						if (val_input >= needVal && val_input - needVal <= 5000 && propNum[0] <= prop_input_all[0].userBagProp.propNumber && propNum[1] <= prop_input_all[1].userBagProp.propNumber && propNum[2] <= prop_input_all[2].userBagProp.propNumber && propNum[3] <= prop_input_all[3].userBagProp.propNumber && propNum[4] <= prop_input_all[4].userBagProp.propNumber) {
-							// 这个方法会出现如果一个属性材料需要两个4个，而材料有6个的话，会一直卡住的情况。但低概率事件，暂时不处理了，希望有好的办法(艹,出现了,我修bug行了吧(┬┬﹏┬┬))
-							console.log(`找到${prop_input_all[0].propInfo.name}+${prop_input_all[1].propInfo.name}+${prop_input_all[2].propInfo.name}+${prop_input_all[3].propInfo.name}+${prop_input_all[4].propInfo.name} 药值共${val_input}`);
-							return prop_input_all;
+							for (var r = 0; r < prop_equal.length; r++) {
+								prop_input_all[prop_equal[r][1]].userBagProp.propNumber -= propNum[prop_equal[r][0]];
+								// console.log(prop_equal[r][1], prop_equal[r][0]);
+							}
+							// 这个方法会出现如果一个属性材料需要两个4个，而材料有6个的话，会一直卡住的情况。但低概率事件，暂时不处理了，希望有好的办法(艹,出现了,我修bug行了吧(┬┬﹏┬┬)，bug修好了，运行速度急剧下降，丢)
+							if (propNum[0] <= prop_input_all[0].userBagProp.propNumber && propNum[1] <= prop_input_all[1].userBagProp.propNumber && propNum[2] <= prop_input_all[2].userBagProp.propNumber && propNum[3] <= prop_input_all[3].userBagProp.propNumber && propNum[4] <= prop_input_all[4].userBagProp.propNumber) {
+								console.log(`找到${prop_input_all[0].propInfo.name}+${prop_input_all[1].propInfo.name}+${prop_input_all[2].propInfo.name}+${prop_input_all[3].propInfo.name}+${prop_input_all[4].propInfo.name} 药值共${val_input}`);
+								return prop_input_all;
+							}
 						}
 					}
 				}
@@ -279,12 +290,8 @@ async function autoInput(userid, drugname, druglv, mapx, mapy) {
 		console.log("***开始检索材料***");
 		prop_input_all = await findProp(userid, needVal, attribute, propNum);
 		if (prop_input_all == undefined) {
-			console.log("没有找到合适的材料");
-			//server酱提醒，如使用需自行申请更换sendkey
-			await send("SCT153699ToIVbZFnVru7DLtLS4WO8BlnI", "没有找到合适的材料", "请及时处理，十分钟后将再次通知", 9);
-			// 本来打算弄一个按任意键继续的,不过感觉没必要,本来也不好直接操作,但为了节省server酱次数就这样吧
-			await sleep(600000);
-			return false;
+			prop_id = 0;
+			return prop_id;
 		} else {
 			for (var i = 0; i < prop_input_all.length; i++) {
 				prop_id.push(prop_input_all[i].userBagProp.id);
@@ -295,41 +302,146 @@ async function autoInput(userid, drugname, druglv, mapx, mapy) {
 	}
 }
 
-const sleep = (delay) => new Promise((resolve) => setTimeout(resolve, delay));
-async function main(userid, drugname, druglv, mapname, mapx, mapy) {
-	prop_id = autoInput(userid, drugname, druglv, mapx, mapy);
-	await sleep(3000);
-	drugid = prop_id.shift();
-	drugstate = await makeDrug(userid, drugid, prop_id, druglv * 10);
-	await sleep(1500);
-	if (drugstate[0] == 0 && drugstate[1] > 0) {
-		console.log(`***丹雷出现，开始抗雷***`);
-		for (let count = 0; count < 30; count++) {
-			drughp = await handle(userid, 1);
-			await sleep(400);
-			drughp = await handle(userid, 2);
-			await sleep(400);
-			if (drughp[0] == 0 && drughp[1] > 0) {
-				console.log(`***丹雷未消散，打坐***`);
-				userstate = await dazuo(userid, mapname, mapx, mapy);
-				await sleep(4000);
-			} else if (drughp[0] == -1 && drughp[3] !== "异常信息") {
-				console.log(`***${(msg.msg)}，打坐***`);
-				userstate = await dazuo(userid, mapname, mapx, mapy);
-				await sleep(4000);
-			} else break;
+// 历练函数 参数：用户ID, 历练地点, 地图x轴位置, 地图y轴位置, 使用元气数量
+async function experience(userid, mapname, mapx, mapy, offlinenum) {
+	var request = require('request');
+	var options = {
+		'method': 'POST',
+		'url': 'https://yqxxl.yqbros.com/Yqxxl/Map/experience',
+		'headers': {
+			'Content-Type': 'application/json'
+		},
+		body: JSON.stringify({
+			"userId": userid,
+			"mapName": mapname,
+			"mapX": mapx,
+			"mapY": mapy,
+			"offlineNum": offlinenum
+		})
+	};
+	request(options, function (error, response) {
+		if (error) throw new Error(error);
+		msg = JSON.parse(response.body);
+		if (msg.code == 0 && msg.data.propInfo) {
+			console.log(`获得:${msg.data.userBagProp.propNumber}个${msg.data.propInfo.name}`, `回合数：${msg.data.titles.length - 1}`, `状态：灵值${msg.data.userLv.linExp}`, `武值${msg.data.userLv.wuExp}`, `魂值${msg.data.userLv.hunExp}`);
+			state = [msg.code, msg.data.userStateInfo.hp, msg.data.userStateInfo.hpMax, msg.data.userStateInfo.linMp, msg.data.userStateInfo.linMpMax, msg.data.userStateInfo.hunMp, msg.data.userStateInfo.hunMpMax, msg.data.titles.length - 1];
+		} else {
+			console.log(msg.msg.replace('Request succeeded', '历练失败'));
+			state = [msg.code, 0, 0, 0, 0, 0, 0, 0];
 		}
-	}
-	console.log("***最后一轮打坐***");
-	for (let count = 0; count < 30; count++) {
-		console.log(`第${count + 1}次打坐`);
-		userstate = await dazuo(userid, mapname, mapx, mapy);
-		await sleep(4000);
-		if (userstate[0] == 0 && userstate[1] === userstate[2] && userstate[3] === userstate[4] && userstate[5] === userstate[6]) {
-			console.log("***状态已满，结束***");
-			break;
+		return state;
+	});
+}
+
+// 打坐函数 参数：用户ID, 打坐地点, 地图x轴位置, 地图y轴位置
+// 打坐函数 返回值：魂力
+async function dazuo(userid, mapname, mapx, mapy) {
+	var request = require('request');
+	var options = {
+		'method': 'POST',
+		'url': 'https://yqxxl.yqbros.com/Yqxxl/User/startDaZuo',
+		'headers': {
+			'Content-Type': 'application/json'
+		},
+		body: JSON.stringify({
+			"userId": userid,
+			"mapName": mapname,
+			"mapX": mapx,
+			"mapY": mapy
+		})
+	};
+	request(options, function (error, response) {
+		if (error) throw new Error(error);
+		msg = JSON.parse(response.body);
+		if (msg.code == 0) {
+			console.log(`气血:${msg.data.userStateInfo.hp}/${msg.data.userStateInfo.hpMax} 灵：${msg.data.userStateInfo.linMp}/${msg.data.userStateInfo.linMpMax} 魂：${msg.data.userStateInfo.hunMp}/${msg.data.userStateInfo.hunMpMax}`);
+			userstate = [msg.code, msg.data.userStateInfo.hp, msg.data.userStateInfo.hpMax, msg.data.userStateInfo.linMp, msg.data.userStateInfo.linMpMax, msg.data.userStateInfo.hunMp, msg.data.userStateInfo.hunMpMax];
+		} else {
+			console.log(msg.msg);
+			userstate = [msg.code, 0, 0, 0, 0, 0, 0];
+		}
+		return userstate;
+	});
+}
+
+// 历练主函数，参数：用户ID, 历练地点, 打坐地图，地图x轴位置, 地图y轴位置, 使用元气数量
+// 这里因为是直接把历练函数拿过来了，参数有点乱，不过好在没出啥问题
+async function Experience(userid, mapname, sitmap, mapx, mapy, offlinenum) {
+	for (let count = 0; count < 1000; count++) {
+		console.log(`第${count + 1}次历练`);
+		try {
+			state = await experience(userid, mapname, mapx, mapy, offlinenum);
+			await sleep(4000);
+			if (state[7] > 4) {
+				await sleep(100 + (state[7] - 4) / 2 * 1600);
+			}
+			if (state[0] == 0 && state[1] < state[2] / 10) throw ("气血不足");
+			if (state[0] == 0 && state[3] < state[4] / 10) throw ("灵力不足");
+			if (state[0] == 0 && state[5] < state[6] / 10) throw ("魂力不足");
+			if (state[0] == 0 && state[2] == 0) throw ("历练失败");
+			if (state[0] == -2) throw ("身体被掏空");
+		} catch (error) {
+			console.log(`***${error}，开始打坐***`);
+			for (let count = 0; count < 25; count++) {
+				console.log(`第${count + 1}次打坐`);
+				userstate = await dazuo(userid, sitmap, mapx, mapy);
+				await sleep(4000);
+				if (userstate[0] == 0 && userstate[1] === userstate[2] && userstate[3] === userstate[4] && userstate[5] === userstate[6]) {
+					console.log("***状态已满，打坐结束***");
+					break;
+				}
+			}
 		}
 	}
 }
-// main(userid, drugname, druglv, mapname, mapx, mapy);
-main("4837a285-bb1a-4f9a-886e-946a3e11597a", "聚液丹", 7, "无极山1", 1, 2)
+
+const sleep = (delay) => new Promise((resolve) => setTimeout(resolve, delay));
+async function main(userid, drugname, druglv, sitmap, mapx, mapy, experiencemap) {
+	prop_id = autoInput(userid, drugname, druglv, mapx, mapy);
+	await sleep(2000);
+	if (prop_id == 0) {
+		console.log("没有找到合适的材料，发送通知并开始历练");
+		//server酱提醒，如使用需自行申请更换sendkey
+		await send("SCT153699ToIVbZFnVru7DLtLS4WO8BlnI", "没有找到合适的材料", "请及时处理，十分钟后将再次通知", 9);
+		// 本来打算弄一个按任意键继续的,不过感觉没必要,本来也不好直接操作,但为了节省server酱次数就这样吧
+		// 加一个历练看看效果
+		await sleep(500);
+		Experience(userid, experiencemap, sitmap, mapx, mapy, 0);
+		await sleep(600000);
+	} else {
+		drugid = prop_id.shift();
+		console.log(`***开始炼制${drugname}***`);
+		drugstate = await makeDrug(userid, drugid, prop_id, druglv * 10);
+		await sleep(1500);
+		if (drugstate[0] == 0 && drugstate[1] > 0) {
+			console.log(`***丹雷出现，开始抗雷***`);
+			for (let count = 0; count < 30; count++) {
+				drughp = await handle(userid, 1);
+				await sleep(400);
+				drughp = await handle(userid, 2);
+				await sleep(400);
+				if (drughp[0] == 0 && drughp[1] > 0) {
+					console.log(`***丹雷未消散，打坐***`);
+					userstate = await dazuo(userid, sitmap, mapx, mapy);
+					await sleep(4000);
+				} else if (drughp[0] == -1 && drughp[3] !== "异常信息") {
+					console.log(`***${(msg.msg)}，打坐***`);
+					userstate = await dazuo(userid, sitmap, mapx, mapy);
+					await sleep(4000);
+				} else break;
+			}
+		}
+		console.log("***最后一轮打坐***");
+		for (let count = 0; count < 30; count++) {
+			console.log(`第${count + 1}次打坐`);
+			userstate = await dazuo(userid, sitmap, mapx, mapy);
+			await sleep(4000);
+			if (userstate[0] == 0 && userstate[1] === userstate[2] && userstate[3] === userstate[4] && userstate[5] === userstate[6]) {
+				console.log("***状态已满，结束***");
+				break;
+			}
+		}
+	}
+}
+// main(userid, drugname, druglv, sitmap, mapx, mapy, experiencemap);
+main("4837a285-bb1a-4f9a-886e-946a3e11597a", "聚气丹", 7, "无极山1", 1, 2, "天潭2")
