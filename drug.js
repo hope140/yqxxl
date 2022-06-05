@@ -27,6 +27,28 @@ async function makeDrug(userid, drugid, lists, lv) {
 	});
 }
 
+async function send(SendKey, title, desp, channel) {
+	var request = require('request');
+	var url = `https://sctapi.ftqq.com/${SendKey}.send`;
+	var dataString = `title=${title}&desp=${desp}&channel=${channel}`;
+	var options = {
+		'method': 'POST',
+		'headers': {
+			'Content-Type': 'application/x-www-form-urlencoded'
+		},
+		'url': url,
+		body: dataString
+	};
+	request(options, function (error, response) {
+		if (error) throw new Error(error);
+		msg = JSON.parse(response.body);
+		// console.log(msg);
+		if (msg.code == 0) {
+			console.log(`已发送通知`);
+		}
+	});
+}
+
 // // 吃九转，没啥用
 // async function useDrug(userid, bagid) {
 // 	var request = require('request');
@@ -247,6 +269,8 @@ async function autoInput(userid, drugname, druglv, mapx, mapy) {
 		prop_input_all = await findProp(userid, needVal, attribute, propNum);
 		if (prop_input_all == undefined) {
 			console.log("没有找到合适的材料");
+			//server酱提醒，如使用需自行申请更换sendkey
+			await send("SCT153699ToIVbZFnVru7DLtLS4WO8BlnI", "没有找到合适的材料", "请及时处理", 9);
 			return false;
 		} else {
 			for (var i = 0; i < prop_input_all.length; i++) {
