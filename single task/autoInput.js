@@ -91,10 +91,21 @@ async function findProp(userid, needVal, attribute, propNum) {
 			for (var m = 0; m < prop_input[2].length; m++) {
 				for (var n = 0; n < prop_input[3].length; n++) {
 					for (var o = 0; o < prop_input[4].length; o++) {
-						var prop_input_all = [prop_input[0][k], prop_input[1][l], prop_input[2][m], prop_input[3][n], prop_input[4][o]];
+						var prop_input_all = [prop_input[0][k], prop_input[1][l], prop_input[2][m], prop_input[3][n], prop_input[4][o]] , prop_equal = [];
+						// 判断五个值(prop_input_all[p].userBagProp.id)是否有相等的
+						for (var p = 0; p < 5; p++) {
+							for (var q = p + 1; q < 5; q++) {
+								if (prop_input_all[p].userBagProp.id == prop_input_all[q].userBagProp.id) {
+									prop_equal.push([p , q]);
+								}
+							}
+						}
+						for (var r = 0; r < prop_equal.length; r++) {
+							prop_input_all[prop_equal[r][1]].userBagProp.propNumber -= propNum[prop_equal[r][0]];
+						}
 						val_input = propNum[0] * prop_input_all[0].propInfo.value + propNum[1] * prop_input_all[1].propInfo.value + propNum[2] * prop_input_all[2].propInfo.value + propNum[3] * prop_input_all[3].propInfo.value + propNum[4] * prop_input_all[4].propInfo.value;
 						if (val_input >= needVal && val_input - needVal <= 5000 && propNum[0] <= prop_input_all[0].userBagProp.propNumber && propNum[1] <= prop_input_all[1].userBagProp.propNumber && propNum[2] <= prop_input_all[2].userBagProp.propNumber && propNum[3] <= prop_input_all[3].userBagProp.propNumber && propNum[4] <= prop_input_all[4].userBagProp.propNumber) {
-							// 这个方法会出现如果一个属性材料需要两个4个，而材料有6个的话，会一直卡住的情况。但低概率事件，暂时不处理了，希望有好的办法
+							// 这个方法会出现如果一个属性材料需要两个4个，而材料有6个的话，会一直卡住的情况。但低概率事件，暂时不处理了，希望有好的办法(艹,出现了,我修bug行了吧(┬┬﹏┬┬))
 							console.log(`找到${prop_input_all[0].propInfo.name}+${prop_input_all[1].propInfo.name}+${prop_input_all[2].propInfo.name}+${prop_input_all[3].propInfo.name}+${prop_input_all[4].propInfo.name} 药值共${val_input}`);
 							return prop_input_all;
 						}
@@ -146,4 +157,4 @@ async function autoInput(userid, mapx, mapy, drugname, druglv) {
 	}
 }
 // userid mapx mapy drugname druglv （我也不知道为啥这里要地图信息）
-autoInput("4837a285-bb1a-4f9a-886e-946a3e11597a", 1, 3, "聚魂丹", 4);
+autoInput("4837a285-bb1a-4f9a-886e-946a3e11597a", 1, 3, "聚液丹", 7);
