@@ -1,116 +1,3 @@
-async function makeDrug(userid, drugid, lists, lv) {
-	var request = require('request');
-	var options = {
-		'method': 'POST',
-		'url': 'https://yqxxl.yqbros.com/Yqxxl/Drug/makeDrug',
-		'headers': {
-			'Content-Type': 'application/json'
-		},
-		body: JSON.stringify({
-			"userId": userid,
-			"drugId": drugid,
-			"lists": lists,
-			"lv": lv
-		})
-	};
-	request(options, function (error, response) {
-		if (error) throw new Error(error);
-		msg = JSON.parse(response.body);
-		if (msg.code == 0) {
-			console.log(`${msg.data.msg} 丹雷状态${msg.data.userMakeDrug.danleiHp}/${msg.data.userMakeDrug.danleiHpMax}`);
-			drugstate = [msg.code, msg.data.userMakeDrug.danleiHp, msg.data.userMakeDrug.danleiHpMax];
-		} else {
-			console.log(msg.msg);
-			drugstate = [msg.code, 0, 0];
-		}
-		return drugstate;
-	});
-}
-
-// // 吃九转，没啥用
-// async function useDrug(userid, bagid) {
-// 	var request = require('request');
-// 	var options = {
-// 		'method': 'POST',
-// 		'url': 'https://yqxxl.yqbros.com/Yqxxl/Drug/useDrug',
-// 		'headers': {
-// 			'Content-Type': 'application/json'
-// 		},
-// 		body: JSON.stringify({
-// 			"userId": userid,
-// 			"bagId": bagid
-// 		})
-// 	};
-// 	request(options, function (error, response) {
-// 		if (error) throw new Error(error);
-// 		msg = JSON.parse(response.body);
-// 		if (msg.code == 0) {
-// 			console.log(msg.data.msg);
-// 		} else {
-// 			console.log(msg.msg);
-// 		}
-// 	});
-// }
-
-// 打坐函数 参数：用户ID, 打坐地点, 地图x轴位置, 地图y轴位置
-// 打坐函数 返回值：魂力
-async function dazuo(userid, mapname, mapx, mapy) {
-	var request = require('request');
-	var options = {
-		'method': 'POST',
-		'url': 'https://yqxxl.yqbros.com/Yqxxl/User/startDaZuo',
-		'headers': {
-			'Content-Type': 'application/json'
-		},
-		body: JSON.stringify({
-			"userId": userid,
-			"mapName": mapname,
-			"mapX": mapx,
-			"mapY": mapy
-		})
-	};
-	request(options, function (error, response) {
-		if (error) throw new Error(error);
-		msg = JSON.parse(response.body);
-		if (msg.code == 0) {
-			console.log(`气血:${msg.data.userStateInfo.hp}/${msg.data.userStateInfo.hpMax} 灵：${msg.data.userStateInfo.linMp}/${msg.data.userStateInfo.linMpMax} 魂：${msg.data.userStateInfo.hunMp}/${msg.data.userStateInfo.hunMpMax}`);
-			userstate = [msg.code, msg.data.userStateInfo.hp, msg.data.userStateInfo.hpMax, msg.data.userStateInfo.linMp, msg.data.userStateInfo.linMpMax, msg.data.userStateInfo.hunMp, msg.data.userStateInfo.hunMpMax];
-		} else {
-			console.log(msg.msg);
-			userstate = [msg.code, 0, 0, 0, 0, 0, 0];
-		}
-		return userstate;
-	});
-}
-
-async function handle(userid, type) {
-	var request = require('request');
-	var options = {
-		'method': 'POST',
-		'url': 'https://yqxxl.yqbros.com/Yqxxl/Drug/danleiHandLe',
-		'headers': {
-			'Content-Type': 'application/json'
-		},
-		body: JSON.stringify({
-			"userId": userid,
-			"type": type
-		})
-	};
-	request(options, function (error, response) {
-		if (error) throw new Error(error);
-		msg = JSON.parse(response.body);
-		if (msg.code == 0) {
-			console.log(msg.data.msg + " 丹雷剩余：" + msg.data.userMakeDrug.danleiHp + "/" + msg.data.userMakeDrug.danleiHpMax);
-			drughp = [msg.code, msg.data.userMakeDrug.danleiHp, msg.data.userMakeDrug.danleiHpMax, msg.msg];
-		} else {
-			console.log(msg.msg);
-			drughp = [msg.code, 0, 0, msg.msg];
-		}
-		return drughp;
-	});
-}
-// 4000毫秒间隔，状态满后自动停止打坐
-
 async function getUserDrugInfo(userid, mapx, mapy) {
 	var request = require('request');
 	var options = {
@@ -167,6 +54,7 @@ async function getUserBag(userid) {
 	});
 }
 
+const sleep = (delay) => new Promise((resolve) => setTimeout(resolve, delay));
 async function findProp(userid, needVal, attribute, propNum) {
 	PropList = await getUserBag(userid);
 	await sleep(1000);
@@ -216,7 +104,7 @@ async function findProp(userid, needVal, attribute, propNum) {
 		}
 	}
 }
-async function autoInput(userid, drugname, druglv, mapx, mapy) {
+async function autoInput(userid, mapx, mapy, drugname, druglv) {
 	DrugInfo = await getUserDrugInfo(userid, mapx, mapy);
 	await sleep(500);
 	var drugName = [], drugNeedProp = []; attribute = []; propNum = [], prop_id = [];
@@ -241,7 +129,7 @@ async function autoInput(userid, drugname, druglv, mapx, mapy) {
 		propNum[3] = drugNeedProp[drugIndex].prop4Num;
 		propNum[4] = drugNeedProp[drugIndex].prop5Num;
 		needVal = drugNeedProp[drugIndex].needVal * druglv;
-		drugid = drugNeedProp[drugIndex].drugId;
+		drugId = drugNeedProp[drugIndex].drugId;
 		console.log(`${druglv}品${drugname}所需药值：${needVal}`);
 		console.log("***开始检索材料***");
 		prop_input_all = await findProp(userid, needVal, attribute, propNum);
@@ -252,47 +140,10 @@ async function autoInput(userid, drugname, druglv, mapx, mapy) {
 			for (var i = 0; i < prop_input_all.length; i++) {
 				prop_id.push(prop_input_all[i].userBagProp.id);
 			}
-			prop_id.unshift(drugid);
 			return prop_id;
+			// console.log(prop_id);
 		}
 	}
 }
-
-const sleep = (delay) => new Promise((resolve) => setTimeout(resolve, delay));
-async function main(userid, drugname, druglv, mapname, mapx, mapy) {
-	prop_id = autoInput(userid, drugname, druglv, mapx, mapy);
-	await sleep(3000);
-	drugid = prop_id.shift();
-	drugstate = await makeDrug(userid, drugid, prop_id, druglv * 10);
-	await sleep(1500);
-	if (drugstate[0] == 0 && drugstate[1] > 0) {
-		console.log(`***丹雷出现，开始抗雷***`);
-		for (let count = 0; count < 30; count++) {
-			drughp = await handle(userid, 1);
-			await sleep(400);
-			drughp = await handle(userid, 2);
-			await sleep(400);
-			if (drughp[0] == 0 && drughp[1] > 0) {
-				console.log(`***丹雷未消散，打坐***`);
-				userstate = await dazuo(userid, mapname, mapx, mapy);
-				await sleep(4000);
-			} else if (drughp[0] == -1 && drughp[3] !== "异常信息") {
-				console.log(`***${(msg.msg)}，打坐***`);
-				userstate = await dazuo(userid, mapname, mapx, mapy);
-				await sleep(4000);
-			} else break;
-		}
-	}
-	console.log("***最后一轮打坐***");
-	for (let count = 0; count < 30; count++) {
-		console.log(`第${count + 1}次打坐`);
-		userstate = await dazuo(userid, mapname, mapx, mapy);
-		await sleep(4000);
-		if (userstate[0] == 0 && userstate[1] === userstate[2] && userstate[3] === userstate[4] && userstate[5] === userstate[6]) {
-			console.log("***状态已满，结束***");
-			break;
-		}
-	}
-}
-// main(userid, drugname, druglv, mapname, mapx, mapy);
-main("4837a285-bb1a-4f9a-886e-946a3e11597a", "聚魂丹", 7, "无极山1", 1, 2)
+// userid mapx mapy drugname druglv （我也不知道为啥这里要地图信息）
+autoInput("4837a285-bb1a-4f9a-886e-946a3e11597a", 1, 3, "聚魂丹", 4);

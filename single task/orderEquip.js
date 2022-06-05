@@ -17,7 +17,7 @@ async function getUserBag(userid) {
 		// 法器列表
 		if (msg.code == 0) {
 			EquipList = msg.data.userBagEquipList;
-			console.log(`共有${EquipList.length}件法器`);
+			// console.log(`共有${EquipList.length}件法器`);
 		} else {
 			console.log(msg.msg);
 			EquipList = [];
@@ -61,9 +61,7 @@ async function orderEquip(userid, mapx, mapy) {
 	console.log("***获取背包信息（属性从大到小排序）***");
 	EquipList = await getUserBag(userid);
 	await sleep(1000);
-	var equip_wu = [];
-	var equip_lin = [];
-	var equip_hun = [];
+	var equip_wu = [], equip_lin = [], equip_hun = [];
 	for (var i = 0; i < EquipList.length; i++) {
 		if (EquipList[i].equipRule.type == 1 && EquipList[i].equipRule.lv <= userlv[1]) {
 			equip_wu.push(EquipList[i]);
