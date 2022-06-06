@@ -63,7 +63,7 @@ async function getUserBag(userid) {
 }
 
 const sleep = (delay) => new Promise((resolve) => setTimeout(resolve, delay));
-async function findProp(userid, needVal, attribute, propNum) {
+async function findProp(userid, needVal, attribute, propNum, druglv) {
 	PropList = await getUserBag(userid);
 	await sleep(1000);
 	var prop_mu = [], prop_huo = [], prop_tu = [], prop_jin = [], prop_shui = [], prop_input = [];
@@ -99,25 +99,26 @@ async function findProp(userid, needVal, attribute, propNum) {
 			for (var m = 0; m < prop_input[2].length; m++) {
 				for (var n = 0; n < prop_input[3].length; n++) {
 					for (var o = 0; o < prop_input[4].length; o++) {
-						var prop_input_all = _copyArrayObject([(prop_input[0][k]), (prop_input[1][l]),(prop_input[2][m]), (prop_input[3][n]), (prop_input[4][o])]), prop_equal = [];
+						var prop_input_all = [(prop_input[0][k]), (prop_input[1][l]),(prop_input[2][m]), (prop_input[3][n]), (prop_input[4][o])], prop_equal = [];
 						val_input = propNum[0] * prop_input_all[0].propInfo.value + propNum[1] * prop_input_all[1].propInfo.value + propNum[2] * prop_input_all[2].propInfo.value + propNum[3] * prop_input_all[3].propInfo.value + propNum[4] * prop_input_all[4].propInfo.value;
-						if (val_input >= needVal && val_input - needVal <= 20000) {
+						if (val_input >= needVal && val_input - needVal <= 6000 * druglv) {
 							// 判断五个值(prop_input_all[p].userBagProp.id)是否有相等的
+							var prop_input_all_now = _copyArrayObject(prop_input_all)
 							for (var p = 0; p < 5; p++) {
 								for (var q = p + 1; q < 5; q++) {
-									if (prop_input_all[p].userBagProp.id == prop_input_all[q].userBagProp.id) {
+									if (prop_input_all_now[p].userBagProp.id == prop_input_all_now[q].userBagProp.id) {
 										prop_equal.push([p, q]);
 									}
 								}
 							}
 							for (var r = 0; r < prop_equal.length; r++) {
-								prop_input_all[prop_equal[r][1]].userBagProp.propNumber -= propNum[prop_equal[r][0]];
+								prop_input_all_now[prop_equal[r][1]].userBagProp.propNumber -= propNum[prop_equal[r][0]];
 								// console.log(prop_equal[r][1], prop_equal[r][0]);
 							}
-							// 这个方法会出现如果一个属性材料需要两个4个，而材料有6个的话，会一直卡住的情况。但低概率事件，暂时不处理了，希望有好的办法(艹,出现了,我修bug行了吧(┬┬﹏┬┬)，bug修好了，运行速度急剧下降，丢)
-							if (propNum[0] <= prop_input_all[0].userBagProp.propNumber && propNum[1] <= prop_input_all[1].userBagProp.propNumber && propNum[2] <= prop_input_all[2].userBagProp.propNumber && propNum[3] <= prop_input_all[3].userBagProp.propNumber && propNum[4] <= prop_input_all[4].userBagProp.propNumber) {
-								console.log(`找到${prop_input_all[0].propInfo.name}+${prop_input_all[1].propInfo.name}+${prop_input_all[2].propInfo.name}+${prop_input_all[3].propInfo.name}+${prop_input_all[4].propInfo.name} 药值共${val_input}`);
-								return prop_input_all;
+							// 这个方法会出现如果一个属性材料需要两个4个，而材料有6个的话，会一直卡住的情况。但低概率事件，暂时不处理了，希望有好的办法(艹,出现了,我修bug行了吧(┬┬﹏┬┬)，bug修好了，运行速度急剧下降，丢(再补充，可以手动把一些数量极少的直接处理掉，剩下的计算时间会小很多很多(再补充，又调整了一下，将影响速度的东西放到了判断最后一层)))
+							if (propNum[0] <= prop_input_all_now[0].userBagProp.propNumber && propNum[1] <= prop_input_all_now[1].userBagProp.propNumber && propNum[2] <= prop_input_all_now[2].userBagProp.propNumber && propNum[3] <= prop_input_all_now[3].userBagProp.propNumber && propNum[4] <= prop_input_all_now[4].userBagProp.propNumber) {
+								console.log(`找到${prop_input_all_now[0].propInfo.name}+${prop_input_all_now[1].propInfo.name}+${prop_input_all_now[2].propInfo.name}+${prop_input_all_now[3].propInfo.name}+${prop_input_all_now[4].propInfo.name} 药值共${val_input}`);
+								return prop_input_all_now;
 							}
 						}
 					}
@@ -154,7 +155,7 @@ async function autoInput(userid, mapx, mapy, drugname, druglv) {
 		drugId = drugNeedProp[drugIndex].drugId;
 		console.log(`${druglv}品${drugname}所需药值：${needVal}`);
 		console.log("***开始检索材料***");
-		prop_input_all = await findProp(userid, needVal, attribute, propNum);
+		prop_input_all = await findProp(userid, needVal, attribute, propNum, druglv);
 		if (prop_input_all == undefined) {
 			console.log("没有找到合适的材料");
 			return false;
@@ -168,4 +169,4 @@ async function autoInput(userid, mapx, mapy, drugname, druglv) {
 	}
 }
 // userid mapx mapy drugname druglv （我也不知道为啥这里要地图信息）
-autoInput("4837a285-bb1a-4f9a-886e-946a3e11597a", 1, 3, "聚气丹", 7);
+autoInput("4837a285-bb1a-4f9a-886e-946a3e11597a", 1, 3, "寻古丹", 7);
