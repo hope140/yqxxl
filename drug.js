@@ -35,7 +35,7 @@ async function makeDrug(userid, drugid, lists, lv) {
 	});
 }
 
-async function send(SendKey, title, desp, channel) {
+async function ServerPush(SendKey, title, desp, channel) {
 	var request = require('request');
 	var url = `https://sctapi.ftqq.com/${SendKey}.send`;
 	var dataString = `title=${title}&desp=${desp}&channel=${channel}`;
@@ -52,7 +52,29 @@ async function send(SendKey, title, desp, channel) {
 		msg = JSON.parse(response.body);
 		// console.log(msg);
 		if (msg.code == 0) {
-			console.log(`已发送通知`);
+			console.log(`Server酱已发送通知`);
+		}
+	});
+}
+
+async function DeerPush(key, title, desp) {
+	var request = require('request');
+	var url = `https://api2.pushdeer.com/message/push?pushkey=${key}`;
+	var dataString = `text=${title}&desp=${desp}&type=markdown`;
+	var options = {
+		'method': 'POST',
+		'headers': {
+			'Content-Type': 'application/x-www-form-urlencoded'
+		},
+		'url': url,
+		body: dataString
+	};
+	request(options, function (error, response) {
+		if (error) throw new Error(error);
+		msg = JSON.parse(response.body);
+		// console.log(msg);
+		if (msg.code == 0) {
+			console.log(`PushDeer已发送通知`);
 		}
 	});
 }
@@ -397,13 +419,17 @@ async function Experience(userid, mapname, sitmap, mapx, mapy, offlinenum) {
 }
 
 const sleep = (delay) => new Promise((resolve) => setTimeout(resolve, delay));
-async function main(userid, drugname, druglv, sitmap, mapx, mapy, experiencemap) {
+async function main(userid, drugname, druglv, sitmap, mapx, mapy, experiencemap, Serverkey, Deerkey) {
 	prop_id = autoInput(userid, drugname, druglv, mapx, mapy);
 	await sleep(2000);
 	if (prop_id == 0) {
 		console.log("没有找到合适的材料，发送通知并开始历练");
-		//server酱提醒，如使用需自行申请更换sendkey
-		await send("SCT153699ToIVbZFnVru7DLtLS4WO8BlnI", "没有找到合适的材料", "请及时处理，十分钟后将再次通知", 9);
+		// server酱提醒，如使用需自行申请更换sendkey
+		if (Serverkey) {
+			await ServerPush(Serverkey, "没有找到合适的材料", "请及时处理，一小时后将再次通知", 9);
+		}else if (Deerkey){
+			await DeerPush(Deerkey, "没有找到合适的材料", "请及时处理，一小时后将再次通知");
+		}
 		// 本来打算弄一个按任意键继续的,不过感觉没必要,本来也不好直接操作,但为了节省server酱次数就这样吧
 		// 加一个历练看看效果
 		await sleep(500);
@@ -445,4 +471,4 @@ async function main(userid, drugname, druglv, sitmap, mapx, mapy, experiencemap)
 	}
 }
 // main(userid, drugname, druglv, sitmap, mapx, mapy, experiencemap);
-main("4837a285-bb1a-4f9a-886e-946a3e11597a", "聚气丹", 7, "无极山1", 1, 2, "天潭2")
+main("4837a285-bb1a-4f9a-886e-946a3e11597a", "寻古丹", 7, "无极山1", 1, 2, "天潭2", "", "PDU11730TL2qnZl1EMFulx6P98fSp2UXOoY61etKz");
