@@ -232,7 +232,7 @@ async function orderEquip(userid, mapx, mapy) {
 	// 武
 	console.log(`武法器`);
 	equip_wu.sort(function (x, y) {
-		return x.equipIncrease.increase - y.equipIncrease.increase;
+		return x.equipIncrease.increase * x.equipRule.equipIncrease * Math.pow(1 + x.userBagEquip.lvGrowthValue, x.userBagEquip.addLv) - y.equipIncrease.increase * y.equipRule.equipIncrease * Math.pow(1 + y.userBagEquip.lvGrowthValue, y.userBagEquip.addLv);
 	});
 	equip_wu.reverse();
 	order_wu = [equip_wu.slice(0, 3)[0].userBagEquip.id, equip_wu.slice(0, 3)[1].userBagEquip.id, equip_wu.slice(0, 3)[2].userBagEquip.id];
@@ -240,7 +240,7 @@ async function orderEquip(userid, mapx, mapy) {
 	// 灵
 	console.log(`灵法器`);
 	equip_lin.sort(function (x, y) {
-		return x.equipIncrease.increase - y.equipIncrease.increase;
+		return x.equipIncrease.increase * x.equipRule.equipIncrease * Math.pow(1 + x.userBagEquip.lvGrowthValue, x.userBagEquip.addLv) - y.equipIncrease.increase * y.equipRule.equipIncrease * Math.pow(1 + y.userBagEquip.lvGrowthValue, y.userBagEquip.addLv);
 	});
 	equip_lin.reverse();
 	order_lin = [equip_lin.slice(0, 3)[0].userBagEquip.id, equip_lin.slice(0, 3)[1].userBagEquip.id, equip_lin.slice(0, 3)[2].userBagEquip.id];
@@ -248,7 +248,7 @@ async function orderEquip(userid, mapx, mapy) {
 	// 魂
 	console.log(`魂法器`);
 	equip_hun.sort(function (x, y) {
-		return x.equipIncrease.increase - y.equipIncrease.increase;
+		return x.equipIncrease.increase * x.equipRule.equipIncrease * Math.pow(1 + x.userBagEquip.lvGrowthValue, x.userBagEquip.addLv) - y.equipIncrease.increase * y.equipRule.equipIncrease * Math.pow(1 + y.userBagEquip.lvGrowthValue, y.userBagEquip.addLv);
 	});
 	equip_hun.reverse();
 	order_hun = [equip_hun.slice(0, 3)[0].userBagEquip.id, equip_hun.slice(0, 3)[1].userBagEquip.id, equip_hun.slice(0, 3)[2].userBagEquip.id];
@@ -308,7 +308,7 @@ async function getAttributesInfo(userid) {
 
 // 先检测状态，然后换装备
 const sleep = (delay) => new Promise((resolve) => setTimeout(resolve, delay));
-async function main(userid, roomName, roomPassWord, difficulty, palyerNum) {
+async function main(userid, roomName, roomPassWord, difficulty, palyerNum, equipid) {
 	LieMoInfo = await getMyProgress(userid);
 	await sleep(1000);
 	LieMoNum = await getUserLieMoInfo(userid);
@@ -317,7 +317,11 @@ async function main(userid, roomName, roomPassWord, difficulty, palyerNum) {
 		console.log("***继续当前猎魔***");
 	}else if (LieMoInfo[0] == -1 && LieMoNum[0] > 0) {
 		console.log("***开始猎魔***");
-		EquipId = await orderEquip(userid, 1, 3);
+		if (equipid){
+			EquipId = equipid;
+		}else{
+			EquipId = await orderEquip(userid, 1, 3);
+		}
 		await sleep(1000);
 		EquipsState = await getAttributesInfo(userid);
 		await sleep(1000);
@@ -331,5 +335,5 @@ async function main(userid, roomName, roomPassWord, difficulty, palyerNum) {
 		console.log("***无创建次数***");
 	}
 }
-// 猎魔单刷
-main("4837a285-bb1a-4f9a-886e-946a3e11597a", "葱芽" , "", 3, 1);
+// 猎魔单刷，如果没有指定equipid，则获取理论最高属性的装备
+main("4837a285-bb1a-4f9a-886e-946a3e11597a", "葱芽" , "", 4, 1, );

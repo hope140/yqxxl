@@ -92,4 +92,4 @@ async function main(userid, mapname, sitmap, mapx, mapy, offlinenum) {
 }
 
 // ID 历练地图名称 x轴位置 y轴位置 使用元气数量
-main("4837a285-bb1a-4f9a-886e-946a3e11597a", "天潭2", "无极山1",1, 2, 0)
+main("4837a285-bb1a-4f9a-886e-946a3e11597a", "天潭2", "琳琅境2",1, 2, 0)

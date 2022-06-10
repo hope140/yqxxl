@@ -65,7 +65,7 @@ async function getUserBag(userid) {
 const sleep = (delay) => new Promise((resolve) => setTimeout(resolve, delay));
 async function findProp(userid, needVal, attribute, propNum, druglv) {
 	PropList = await getUserBag(userid);
-	await sleep(1000);
+	await sleep(1200);
 	var prop_mu = [], prop_huo = [], prop_tu = [], prop_jin = [], prop_shui = [], prop_input = [];
 	for (var i = 0; i < PropList.length; i++) {
 		// 过滤稀有材料
@@ -101,7 +101,7 @@ async function findProp(userid, needVal, attribute, propNum, druglv) {
 					for (var o = 0; o < prop_input[4].length; o++) {
 						var prop_input_all = [(prop_input[0][k]), (prop_input[1][l]),(prop_input[2][m]), (prop_input[3][n]), (prop_input[4][o])], prop_equal = [];
 						val_input = propNum[0] * prop_input_all[0].propInfo.value + propNum[1] * prop_input_all[1].propInfo.value + propNum[2] * prop_input_all[2].propInfo.value + propNum[3] * prop_input_all[3].propInfo.value + propNum[4] * prop_input_all[4].propInfo.value;
-						if (val_input >= needVal && val_input - needVal <= 50000 * druglv) {
+						if (val_input >= needVal && val_input - needVal <= 100000 * druglv) {
 							// 判断五个值(prop_input_all[p].userBagProp.id)是否有相等的
 							var prop_input_all_now = _copyArrayObject(prop_input_all)
 							for (var p = 0; p < 5; p++) {
@@ -169,4 +169,4 @@ async function autoInput(userid, mapx, mapy, drugname, druglv) {
 	}
 }
 // userid mapx mapy drugname druglv （我也不知道为啥这里要地图信息）
-autoInput("4837a285-bb1a-4f9a-886e-946a3e11597a", 1, 3, "破灵丹", 7);
+autoInput("4837a285-bb1a-4f9a-886e-946a3e11597a", 1, 3, "破体丹", 5);

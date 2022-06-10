@@ -156,7 +156,7 @@ async function orderEquip(userid, mapx, mapy) {
 	// 武
 	console.log(`武法器`);
 	equip_wu.sort(function (x, y) {
-		return x.equipIncrease.increase - y.equipIncrease.increase;
+		return x.equipIncrease.increase * x.equipRule.equipIncrease * Math.pow(1 + x.userBagEquip.lvGrowthValue, x.userBagEquip.addLv) - y.equipIncrease.increase * y.equipRule.equipIncrease * Math.pow(1 + y.userBagEquip.lvGrowthValue, y.userBagEquip.addLv);
 	});
 	equip_wu.reverse();
 	order_wu = [equip_wu.slice(0, 3)[0].userBagEquip.id, equip_wu.slice(0, 3)[1].userBagEquip.id, equip_wu.slice(0, 3)[2].userBagEquip.id];
@@ -164,7 +164,7 @@ async function orderEquip(userid, mapx, mapy) {
 	// 灵
 	console.log(`灵法器`);
 	equip_lin.sort(function (x, y) {
-		return x.equipIncrease.increase - y.equipIncrease.increase;
+		return x.equipIncrease.increase * x.equipRule.equipIncrease * Math.pow(1 + x.userBagEquip.lvGrowthValue, x.userBagEquip.addLv) - y.equipIncrease.increase * y.equipRule.equipIncrease * Math.pow(1 + y.userBagEquip.lvGrowthValue, y.userBagEquip.addLv);
 	});
 	equip_lin.reverse();
 	order_lin = [equip_lin.slice(0, 3)[0].userBagEquip.id, equip_lin.slice(0, 3)[1].userBagEquip.id, equip_lin.slice(0, 3)[2].userBagEquip.id];
@@ -172,7 +172,7 @@ async function orderEquip(userid, mapx, mapy) {
 	// 魂
 	console.log(`魂法器`);
 	equip_hun.sort(function (x, y) {
-		return x.equipIncrease.increase - y.equipIncrease.increase;
+		return x.equipIncrease.increase * x.equipRule.equipIncrease * Math.pow(1 + x.userBagEquip.lvGrowthValue, x.userBagEquip.addLv) - y.equipIncrease.increase * y.equipRule.equipIncrease * Math.pow(1 + y.userBagEquip.lvGrowthValue, y.userBagEquip.addLv);
 	});
 	equip_hun.reverse();
 	order_hun = [equip_hun.slice(0, 3)[0].userBagEquip.id, equip_hun.slice(0, 3)[1].userBagEquip.id, equip_hun.slice(0, 3)[2].userBagEquip.id];

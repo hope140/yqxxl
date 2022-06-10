@@ -44,4 +44,4 @@ async function sit(userid, mapname, mapx, mapy) {
 	}
 }
 // ID 打坐地图名称 x轴位置 y轴位置
-sit("4837a285-bb1a-4f9a-886e-946a3e11597a", "无极山1", 4, 2, 0)
+sit("4837a285-bb1a-4f9a-886e-946a3e11597a", "琳琅境2", 4, 2, 0)

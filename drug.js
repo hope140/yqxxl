@@ -221,7 +221,7 @@ async function getUserBag(userid) {
 
 async function findProp(userid, needVal, attribute, propNum, druglv) {
 	PropList = await getUserBag(userid);
-	await sleep(1000);
+	await sleep(1200);
 	var prop_mu = [], prop_huo = [], prop_tu = [], prop_jin = [], prop_shui = [], prop_input = [];
 	for (var i = 0; i < PropList.length; i++) {
 		// 过滤稀有材料
@@ -426,9 +426,9 @@ async function main(userid, drugname, druglv, sitmap, mapx, mapy, experiencemap,
 		console.log("没有找到合适的材料，发送通知并开始历练");
 		// server酱提醒，如使用需自行申请更换sendkey
 		if (Serverkey) {
-			await ServerPush(Serverkey, "没有找到合适的材料", "请及时处理，一小时后将再次通知", 9);
+			await ServerPush(Serverkey, `炼制${druglv}品${drugname}失败`, `没有找到合适的材料，请及时处理，一小时后将再次通知`, 9);
 		}else if (Deerkey){
-			await DeerPush(Deerkey, "没有找到合适的材料", "请及时处理，一小时后将再次通知");
+			await DeerPush(Deerkey, `炼制${druglv}品${drugname}失败`, `没有找到合适的材料，请及时处理，一小时后将再次通知`);
 		}
 		// 本来打算弄一个按任意键继续的,不过感觉没必要,本来也不好直接操作,但为了节省server酱次数就这样吧
 		// 加一个历练看看效果
@@ -471,4 +471,4 @@ async function main(userid, drugname, druglv, sitmap, mapx, mapy, experiencemap,
 	}
 }
 // main(userid, drugname, druglv, sitmap, mapx, mapy, experiencemap);
-main("4837a285-bb1a-4f9a-886e-946a3e11597a", "寻古丹", 7, "无极山1", 1, 2, "天潭2", "", "PDU11730TL2qnZl1EMFulx6P98fSp2UXOoY61etKz");
+main("4837a285-bb1a-4f9a-886e-946a3e11597a", "寻古丹", 7, "琳琅境2", 1, 2, "天潭2", "", "PDU11730TL2qnZl1EMFulx6P98fSp2UXOoY61etKz");
