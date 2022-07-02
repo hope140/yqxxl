@@ -396,7 +396,7 @@ async function Experience(userid, mapname, sitmap, mapx, mapy, offlinenum) {
 			state = await experience(userid, mapname, mapx, mapy, offlinenum);
 			await sleep(4000);
 			if (state[7] > 4) {
-				await sleep(100 + (state[7] - 4) / 2 * 1600);
+				await sleep((state[7] - 4) / 2 * 1680);
 			}
 			if (state[0] == 0 && state[1] < state[2] / 10) throw ("气血不足");
 			if (state[0] == 0 && state[3] < state[4] / 10) throw ("灵力不足");
@@ -427,7 +427,7 @@ async function main(userid, drugname, druglv, sitmap, mapx, mapy, experiencemap,
 		// server酱提醒，如使用需自行申请更换sendkey
 		if (Serverkey) {
 			await ServerPush(Serverkey, `炼制${druglv}品${drugname}失败`, `没有找到合适的材料，请及时处理，一小时后将再次通知`, 9);
-		}else if (Deerkey){
+		} else if (Deerkey) {
 			await DeerPush(Deerkey, `炼制${druglv}品${drugname}失败`, `没有找到合适的材料，请及时处理，一小时后将再次通知`);
 		}
 		// 本来打算弄一个按任意键继续的,不过感觉没必要,本来也不好直接操作,但为了节省server酱次数就这样吧
@@ -471,4 +471,4 @@ async function main(userid, drugname, druglv, sitmap, mapx, mapy, experiencemap,
 	}
 }
 // main(userid, drugname, druglv, sitmap, mapx, mapy, experiencemap);
-main("4837a285-bb1a-4f9a-886e-946a3e11597a", "寻古丹", 7, "琳琅境2", 1, 2, "天潭2", "", "PDU11730TL2qnZl1EMFulx6P98fSp2UXOoY61etKz");
+main("4837a285-bb1a-4f9a-886e-946a3e11597a", "寻古丹", 7, "无极山2", 3, 1, "天潭2", "", "PDU11730TL2qnZl1EMFulx6P98fSp2UXOoY61etKz");

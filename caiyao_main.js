@@ -98,7 +98,7 @@ async function main(userid, mapname, sitmap, mapx, mapy, offlinenum) {
 		console.log(`第${count + 1}次采药`);
 		try {
 			userhunMp = await collection(userid, mapname, mapx, mapy, offlinenum);
-			await sleep(4000);
+			await sleep(4100);
 			if (userhunMp[0] == 0 && userhunMp[1] < userlv[3]) throw ("魂力不足");
 			if (userhunMp[0] == -1) throw ("采药失败，魂力不足");
 		} catch (Error) {
@@ -106,7 +106,7 @@ async function main(userid, mapname, sitmap, mapx, mapy, offlinenum) {
 			for (let count = 0; count < 30; count++) {
 				console.log(`第${count + 1}次打坐`);
 				hunMp = await dazuo(userid, sitmap, mapx, mapy);
-				await sleep(4000);
+				await sleep(4100);
 				if (hunMp[0] == 0 && hunMp[1] === hunMp[2]) {
 					console.log("***魂力已满，结束***");
 					break;
@@ -116,4 +116,4 @@ async function main(userid, mapname, sitmap, mapx, mapy, offlinenum) {
 	}
 }
 // ID 采药地图名称 打坐地图名称 x轴位置 y轴位置 使用元气数量
-main("4837a285-bb1a-4f9a-886e-946a3e11597a", "武林溪2", "无极山2", 1, 3, 0)
+main("4837a285-bb1a-4f9a-886e-946a3e11597a", "天潭2", "无极山2", 1, 3, 0)

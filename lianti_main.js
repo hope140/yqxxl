@@ -79,4 +79,4 @@ async function main(userid, mapname, mapx, mapy, offlinenum) {
 	}
 }
 //  ID 打坐地图名称 x轴位置 y轴位置 使用元气数量
-main("4837a285-bb1a-4f9a-886e-946a3e11597a", "琳琅境2", 1, 2, 0)
+main("4837a285-bb1a-4f9a-886e-946a3e11597a", "无极山2", 3, 1, 0)

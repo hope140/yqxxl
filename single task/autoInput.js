@@ -169,4 +169,4 @@ async function autoInput(userid, mapx, mapy, drugname, druglv) {
 	}
 }
 // userid mapx mapy drugname druglv （我也不知道为啥这里要地图信息）
-autoInput("4837a285-bb1a-4f9a-886e-946a3e11597a", 1, 3, "破体丹", 5);
+autoInput("4837a285-bb1a-4f9a-886e-946a3e11597a", 1, 3, "寻古丹", 6);

@@ -58,7 +58,7 @@ function* main(userid) {
 	yield gainprop(userid, 7, 1);
 	yield gainprop(userid, 14, 1);
 	yield gainprop(userid, 19, 1);
-
+	yield gainprop(userid, 27, 1);
 }
 const task = main("4837a285-bb1a-4f9a-886e-946a3e11597a")
 task.next()
